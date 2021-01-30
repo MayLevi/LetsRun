@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "28578725969",
+    "project_id": "letsrun-46831",
+    "storage_bucket": "letsrun-46831.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28578725969:android:aaf1770eb713208bac7870",
+        "android_client_info": {
+          "package_name": "com.example.letsrun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28578725969-dlc7qorilj41g0q0couau5cn4n2r4lp9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1Pn9NDU2O8F8euoKa3DZ-7qT35giSYBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "28578725969-dlc7qorilj41g0q0couau5cn4n2r4lp9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
