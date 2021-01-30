@@ -14,23 +14,6 @@ public class Model {
         void onComplete(List<User> list);
     }
     public void getAllFriendes(getAllFriendesListener listener){
-        class MyAsynchtask extends AsyncTask {
-            List<User> data;
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                data = AppLocalDB.db.UserDao().getAll();
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                listener.onComplete(data);
-            }
-        }
-        MyAsynchtask task= new MyAsynchtask();
-        task.execute();
 
     }
     public interface addFriendListener {
@@ -38,24 +21,6 @@ public class Model {
     }
     @SuppressLint("StaticFieldLeak")
     public void addFriend(final User user, addFriendListener listener){
-        class MyAsyncTask extends AsyncTask{
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                AppLocalDB.db.UserDao().insertAll(user);
-                return null;
-            }
-
-            @SuppressLint("StaticFieldLeak")
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                if(listener != null){
-                    listener.onComplete();
-                }
-            }
-        }
-        MyAsyncTask task= new MyAsyncTask();
-        task.execute();
     }
 
 }

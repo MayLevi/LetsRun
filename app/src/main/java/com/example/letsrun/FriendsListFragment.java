@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.letsrun.model.Model;
@@ -28,6 +29,7 @@ public class FriendsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_friends_list, container, false);
+        ListView list =view.findViewById(R.id.FriendsList);
         return view;
     }
     class MyAdapter extends BaseAdapter {
@@ -58,5 +60,13 @@ public class FriendsListFragment extends Fragment {
             tv.setText(user.getId());
             return view;
         }
+    }
+    void reloadData(){
+        Model.instance.getAllFriendes(new Model.getAllFriendesListener() {
+            @Override
+            public void onComplete(List<User> data) {
+                usersList=data;
+            }
+        });
     }
 }
