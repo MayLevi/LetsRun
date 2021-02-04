@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 
 
-public class singing extends Fragment {
+public class SignIn extends Fragment {
 
 
 

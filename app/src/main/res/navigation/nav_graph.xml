@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/singing"
-        android:name="com.example.letsrun.singing"
+        android:name="com.example.letsrun.SignIn"
         android:label="Let's Start Running!"
         tools:layout="@layout/fragment_singing">
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/menu_profile"
-        android:name="com.example.letsrun.profile"
+        android:name="com.example.letsrun.Profile"
         android:label="Profile"
         tools:layout="@layout/fragment_profile">
         <action

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class profile extends Fragment {
+public class Profile extends Fragment {
    View view;
    Button runsBtn;
    Button editBtn;

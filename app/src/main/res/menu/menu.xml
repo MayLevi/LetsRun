@@ -4,10 +4,12 @@
 
     <item
         android:id="@+id/menu_profile"
+        android:icon="@drawable/ic_baseline_person_24"
         android:title="profile"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_track"
+        android:icon="@drawable/ic_baseline_add_24"
         android:title="NewTrack"
         app:showAsAction="never" />
 </menu>
