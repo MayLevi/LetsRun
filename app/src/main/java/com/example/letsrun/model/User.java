@@ -8,10 +8,13 @@ import java.util.List;
 
 @Entity
 public class User {
+
+
     @PrimaryKey
     @NonNull
     private String id;
     private String name;
+    private String imageUrl;
     //private List<RunningTracks> runs;
 
 //    public List<RunningTracks> getRuns() {
@@ -21,7 +24,17 @@ public class User {
 //    public void setRuns(List<RunningTracks> runs) {
 //        this.runs = runs;
 //    }
+public User(@NonNull String id, String name) {
+    this.id = id;
+    this.name = name;
+}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     public String getId() {
         return id;
     }

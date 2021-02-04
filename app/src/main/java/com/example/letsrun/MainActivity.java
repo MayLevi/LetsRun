@@ -47,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
            return true;
      }
         else{
-           return NavigationUI.onNavDestinationSelected(item,navController);
-       }
+
+                return NavigationUI.onNavDestinationSelected(item, navController);
+
+        }
    }
 
 //Switching between fragments from the navBar

@@ -3,45 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/friendsListFragment">
+    app:startDestination="@id/singing">
 
     <fragment
         android:id="@+id/friendsListFragment"
         android:name="com.example.letsrun.FriendsListFragment"
         android:label="Wall"
         tools:layout="@layout/fragment_friends_list">
-        <action
-            android:id="@+id/action_friendsListFragment_to_singing"
-            app:destination="@id/singing" />
-        <action
-            android:id="@+id/action_friendsListFragment_to_profile"
-            app:destination="@id/menu_profile" />
-        <action
-            android:id="@+id/action_friendsListFragment_to_myRunningTracks"
-            app:destination="@id/myRunningTracks" />
+        <argument android:name="user_Name"
+            app:argType="string" />
+        <argument android:name="user_Pass"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/singing"
-        android:name="com.example.letsrun.SignIn"
+        android:name="com.example.letsrun.singing"
         android:label="Let's Start Running!"
-        tools:layout="@layout/fragment_singing">
-        <action
-            android:id="@+id/action_singing_to_profile"
-            app:destination="@id/menu_profile" />
-    </fragment>
+        tools:layout="@layout/fragment_singing"/>
     <fragment
         android:id="@+id/menu_profile"
-        android:name="com.example.letsrun.Profile"
+        android:name="com.example.letsrun.profile"
         android:label="Profile"
         tools:layout="@layout/fragment_profile">
-        <action
-            android:id="@+id/action_profile_to_myRunningTracks"
-            app:destination="@id/myRunningTracks" />
+        <argument
+            android:name="user_Name"
+            app:argType="string" />
+        <argument
+            android:name="user_Pass"
+            app:argType="string" />
     </fragment>
     <action android:id="@+id/action_global_friendsListFragment" app:destination="@id/friendsListFragment" />
     <fragment
         android:id="@+id/myRunningTracks"
         android:name="com.example.letsrun.MyRunningTracks"
         android:label="My Running Tracks"
-        tools:layout="@layout/fragment_my_running_tracks" /><action android:id="@+id/action_global_profile2" app:destination="@id/menu_profile"/>
+        tools:layout="@layout/fragment_my_running_tracks" >
+        <argument
+            android:name="user_Name"
+            app:argType="string" />
+        <argument
+            android:name="user_Pass"
+            app:argType="string" />
+    </fragment><action android:id="@+id/action_global_profile2" app:destination="@id/menu_profile"/>
+    <action android:id="@+id/action_global_myRunningTracks" app:destination="@id/myRunningTracks" />
+    <action android:id="@+id/action_global_singing" app:destination="@id/singing" />
 </navigation>

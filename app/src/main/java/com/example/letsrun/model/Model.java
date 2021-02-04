@@ -26,5 +26,18 @@ public class Model {
     public void addFriend(final User user, addFriendListener listener){
         modelFirebase.addFriend(user,listener);
     }
+    public interface getUserListener {
+        void onComplete(User user);
+    }
+
+    public void getUser(final String pass,String name, getUserListener listener){
+        modelFirebase.getUser(pass,name,listener);
+    }
+    public interface addUserListener {
+        void onComplete();
+    }
+    public void addUser(User user, addUserListener listener){
+        modelFirebase.addUser(user,listener);
+    }
 
 }

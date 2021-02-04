@@ -24,12 +24,20 @@ public class FriendsListFragment extends Fragment {
     Button btn;
     List<User> usersList = new LinkedList<User>();
     MyAdapter adapter;
+    String userPass;
+    String userName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_friends_list, container, false);
+        userName=profileArgs.fromBundle(getArguments()).getUserName();
+        userPass=profileArgs.fromBundle(getArguments()).getUserPass();
         ListView list =view.findViewById(R.id.FriendsList);
+        NavGraphDirections.ActionGlobalProfile2 action = singingDirections.actionGlobalProfile2(userName.toString(), userPass);
+        Navigation.findNavController(view).navigate(action);
+        NavGraphDirections.ActionGlobalMyRunningTracks action2 = singingDirections.actionGlobalMyRunningTracks(userName.toString(), userPass);
+        Navigation.findNavController(view).navigate(action);
         return view;
     }
     class MyAdapter extends BaseAdapter {
