@@ -5,6 +5,15 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/singing">
 
+
+
+
+
+    <fragment
+        android:id="@+id/singing"
+        android:name="com.example.letsrun.singing"
+        android:label="Let's Start Running!"
+        tools:layout="@layout/fragment_singing"/>
     <fragment
         android:id="@+id/friendsListFragment"
         android:name="com.example.letsrun.FriendsListFragment"
@@ -14,12 +23,8 @@
             app:argType="string" />
         <argument android:name="user_Pass"
             app:argType="string" />
+
     </fragment>
-    <fragment
-        android:id="@+id/singing"
-        android:name="com.example.letsrun.singing"
-        android:label="Let's Start Running!"
-        tools:layout="@layout/fragment_singing"/>
     <fragment
         android:id="@+id/menu_profile"
         android:name="com.example.letsrun.profile"
@@ -32,7 +37,7 @@
             android:name="user_Pass"
             app:argType="string" />
     </fragment>
-    <action android:id="@+id/action_global_friendsListFragment" app:destination="@id/friendsListFragment" />
+
     <fragment
         android:id="@+id/myRunningTracks"
         android:name="com.example.letsrun.MyRunningTracks"
@@ -44,7 +49,24 @@
         <argument
             android:name="user_Pass"
             app:argType="string" />
-    </fragment><action android:id="@+id/action_global_profile2" app:destination="@id/menu_profile"/>
+
+    </fragment>
+
+
+
+
+    <fragment
+        android:id="@+id/menu_wall"
+        android:name="com.example.letsrun.WallFragment"
+        android:label="Wall"
+        tools:layout="@layout/fragment_wall"/>
+
+
+
+    <action android:id="@+id/action_global_profile2" app:destination="@id/menu_profile"/>
     <action android:id="@+id/action_global_myRunningTracks" app:destination="@id/myRunningTracks" />
     <action android:id="@+id/action_global_singing" app:destination="@id/singing" />
+    <action
+        android:id="@+id/action_global_friendsListFragment"
+        app:destination="@id/friendsListFragment" /><action android:id="@+id/action_global_menu_wall" app:destination="@id/menu_wall"/>
 </navigation>

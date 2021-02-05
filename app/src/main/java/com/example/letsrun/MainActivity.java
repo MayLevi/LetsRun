@@ -16,7 +16,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
-    MenuItem fav;
+  //  MenuItem fav;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.menu,menu);
-        fav = menu.findItem(R.id.menu_profile);
+        //fav = menu.findItem(R.id.menu_profile);
         return true;
     }
    public boolean onOptionsItemSelected(MenuItem item) {

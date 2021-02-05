@@ -35,26 +35,26 @@ public class profile extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         userName=view.findViewById(R.id.profile_userName);
-        String name=profileArgs.fromBundle(getArguments()).getUserName().toString();
-        userName.setText(name);
+//        String name=profileArgs.fromBundle(getArguments()).getUserName().toString();
+//        userName.setText(name);
         profilePic = view.findViewById(R.id.profile_image);
         runsBtn = view.findViewById(R.id.profile_MyRunBtn);
-        userPass=profileArgs.fromBundle(getArguments()).getUserPass();
-        Model.instance.getUser(userPass,name, new Model.getUserListener() {
-            @Override
-            public void onComplete(User usr) {
-                user = usr;
-//                if (usr.getImageUrl() != null){
-//                    Picasso.get().load(usr.getImageUrl()).placeholder(R.drawable.runner).into(profilePic);
-//                }
-            }
-        });
-        runsBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                NavGraphDirections.ActionGlobalMyRunningTracks action = singingDirections.actionGlobalMyRunningTracks(name, userPass);
-                Navigation.findNavController(v).navigate(action);
-            }
-        });
+//        userPass=profileArgs.fromBundle(getArguments()).getUserPass();
+//        Model.instance.getUser(userPass,name, new Model.getUserListener() {
+//            @Override
+//            public void onComplete(User usr) {
+//                user = usr;
+////                if (usr.getImageUrl() != null){
+////                    Picasso.get().load(usr.getImageUrl()).placeholder(R.drawable.runner).into(profilePic);
+////                }
+//            }
+//        });
+//        runsBtn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                NavGraphDirections.ActionGlobalMyRunningTracks action = singingDirections.actionGlobalMyRunningTracks(name, userPass);
+//                Navigation.findNavController(v).navigate(action);
+//            }
+//        });
 
         return view;
     }

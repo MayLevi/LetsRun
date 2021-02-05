@@ -8,6 +8,11 @@
         android:title="Profile"
         app:showAsAction="never" />
     <item
+        android:id="@+id/menu_wall"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Wall"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/menu_track"
         android:icon="@drawable/ic_baseline_add_24"
         android:title="NewTrack"
