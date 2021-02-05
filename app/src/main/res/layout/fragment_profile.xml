@@ -41,11 +41,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="32dp"
         android:text="Edit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.459"
+        app:layout_constraintHorizontal_bias="0.177"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_userName" />
 
@@ -53,10 +53,34 @@
         android:id="@+id/profile_MyRunBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="80dp"
         android:text="MY RUNNING TRACKS"
-        app:layout_constraintEnd_toEndOf="@+id/profile_EditBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/profile_saveBtn"
+        app:layout_constraintHorizontal_bias="0.548"
         app:layout_constraintStart_toStartOf="@+id/profile_EditBtn"
         app:layout_constraintTop_toBottomOf="@+id/profile_EditBtn" />
+
+    <Button
+        android:id="@+id/profile_editImgBtn"
+        android:layout_width="47dp"
+        android:layout_height="54dp"
+        app:icon="@android:drawable/ic_menu_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/profile_image"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/profile_saveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save changes"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_EditBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profile_EditBtn"
+        app:layout_constraintTop_toTopOf="@+id/profile_EditBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

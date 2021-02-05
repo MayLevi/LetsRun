@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.letsrun.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 
 
@@ -22,6 +23,8 @@ public class singing extends Fragment {
     EditText sign_upPass;
     TextInputEditText sign_inName;
     EditText sign_inPass;
+    String userPass;
+    String userName;
 
 
     @Override
@@ -37,16 +40,17 @@ public class singing extends Fragment {
 
         sign_inBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String userPass=(String) sign_inPass.getText().toString();
-                String userName=(String) sign_inName.getText().toString();
+                userPass=(String) sign_inPass.getText().toString();
+                userName=(String) sign_inName.getText().toString();
                 NavGraphDirections.ActionGlobalProfile2 action = singingDirections.actionGlobalProfile2(userName, userPass);
                 Navigation.findNavController(v).navigate(action);
             }
         });
         sign_upBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String userPass=(String) sign_upPass.getText().toString();
-                String userName=(String) sign_upName.getText().toString();
+                 userPass=(String) sign_upPass.getText().toString();
+                 userName=(String) sign_upName.getText().toString();
+                saveNewUser();
                 NavGraphDirections.ActionGlobalProfile2 action = singingDirections.actionGlobalProfile2(userName, userPass);
                 Navigation.findNavController(v).navigate(action);
             }
@@ -55,5 +59,10 @@ public class singing extends Fragment {
 
 
         return view;
+    }
+
+    public void saveNewUser() {
+        User user=new User(userPass,userName);
+
     }
 }
