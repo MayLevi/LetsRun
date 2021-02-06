@@ -118,8 +118,9 @@
                     android:layout_height="0dp"
                     android:layout_marginBottom="4dp"
                     android:layout_weight="1"
-                    android:tag="facebook_login_button"
 
+                    android:clickable="false"
+                    android:tag="facebook_login_button"
                     android:text="SIGN UP WITH FACEBOOK"
                     android:textColor="@color/white" />
 
@@ -128,8 +129,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:tag="google_login_button"
 
+                    android:clickable="false"
+                    android:tag="google_login_button"
                     android:text="SIGN UP WITH GOOGLE"
                     android:textColor="@color/white" />
 
@@ -138,6 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:clickable="false"
                     android:text="LOG OUT"
                     android:textColor="@color/white" />
 

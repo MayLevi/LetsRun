@@ -75,7 +75,19 @@
     <fragment
         android:id="@+id/menu_signup"
         android:name="com.example.letsrun.SignUpFragment"
-        android:label="fragment_sign_up"
+        android:label="Sign up"
         tools:layout="@layout/fragment_sign_up" />
     <action android:id="@+id/action_global_menu_signup" app:destination="@id/menu_signup" />
+    <fragment
+        android:id="@+id/menu_post"
+        android:name="com.example.letsrun.PostFragment"
+        android:label="Post"
+        tools:layout="@layout/fragment_post" />
+    <action android:id="@+id/action_global_menu_post" app:destination="@id/menu_post" />
+    <fragment
+        android:id="@+id/menu_account"
+        android:name="com.example.letsrun.AccountFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_account" />
+    <action android:id="@+id/action_global_menu_account" app:destination="@id/menu_account" />
 </navigation>

@@ -135,7 +135,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getContext(),"Successfully registered",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Successfully registered",Toast.LENGTH_LONG).show();
                     Navigation.findNavController(getView()).navigate(R.id.action_global_menu_login);
 
 
