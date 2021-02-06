@@ -41,6 +41,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.firebase:firebase-auth:20.0.2'
     implementation 'com.google.firebase:firebase-database:19.6.0'
+    implementation 'com.google.firebase:firebase-storage:19.2.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -51,6 +52,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.google.firebase:firebase-messaging:15.0.2'
 
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
