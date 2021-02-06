@@ -18,11 +18,11 @@ public class MainActivity extends AppCompatActivity {
     NavController navController;
   //  MenuItem fav;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         navController= Navigation.findNavController(this,R.id.mainActivity_navHostfragment);
         NavigationUI.setupActionBarWithNavController(this,navController);
 
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

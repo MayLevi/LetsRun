@@ -5,10 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/singing">
 
-
-
-
-
     <fragment
         android:id="@+id/singing"
         android:name="com.example.letsrun.singing"
@@ -68,5 +64,18 @@
     <action android:id="@+id/action_global_singing" app:destination="@id/singing" />
     <action
         android:id="@+id/action_global_friendsListFragment"
-        app:destination="@id/friendsListFragment" /><action android:id="@+id/action_global_menu_wall" app:destination="@id/menu_wall"/>
+        app:destination="@id/friendsListFragment" />
+    <action android:id="@+id/action_global_menu_wall" app:destination="@id/menu_wall" />
+    <fragment
+        android:id="@+id/menu_login"
+        android:name="com.example.letsrun.LogInFragment"
+        android:label="Log in"
+        tools:layout="@layout/fragment_log_in" />
+    <action android:id="@+id/action_global_menu_login" app:destination="@id/menu_login"/>
+    <fragment
+        android:id="@+id/menu_signup"
+        android:name="com.example.letsrun.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
+    <action android:id="@+id/action_global_menu_signup" app:destination="@id/menu_signup" />
 </navigation>

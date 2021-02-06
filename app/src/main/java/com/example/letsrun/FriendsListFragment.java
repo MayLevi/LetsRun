@@ -63,9 +63,9 @@ public class FriendsListFragment extends Fragment {
                 view = getLayoutInflater().inflate(R.layout.list_row, null);
             }
 
-            TextView tv = view.findViewById(R.id.list_rowText);
-            User user = usersList.get(i);
-            tv.setText(user.getId());
+//            TextView tv = view.findViewById(R.id.list_rowText);
+//            User user = usersList.get(i);
+//            tv.setText(user.getId());
             return view;
         }
     }

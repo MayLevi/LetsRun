@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.letsrun.model.Model;
 import com.example.letsrun.model.User;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -42,7 +43,7 @@ public class WallFragment extends Fragment {
 
 
     RecyclerView list;
-    List<User> userList;
+    LinkedList<User> userList = new LinkedList<>();
 
     public WallFragment() {
         // Required empty public constructor
@@ -84,6 +85,11 @@ public class WallFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
+        userList.add(new User("052","Ron"));
+        userList.add(new User("053","Ron"));
+        userList.add(new User("054","Ron"));
+        userList.add(new User("055","Ron"));
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wall, container, false);
 
@@ -96,22 +102,23 @@ public class WallFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager(layoutManager);
 
-        Model.instance.getAllFriendes(new Model.getAllFriendesListener() {
-            @Override
-            public void onComplete(List<User> list) {
-                userList = list;
+//        Model.instance.getAllFriendes(new Model.getAllFriendesListener() {
+//            @Override
+//            public void onComplete(List<User> list) {
+//                //userList = list;
+//
+//                for(User userList: list)
+//                {
+//                    Log.d("TAG","User ID: " + userList.getId());
+//                }
+//            }
+//        });
 
-                for(User user: list)
-                {
-                    Log.d("TAG","User ID: " + user.getId());
-                }
-            }
-        });
 
 // TO FIX
-//        MyAdapter adapter = new MyAdapter();
-//        list.setAdapter(adapter);
-        ///
+        MyAdapter adapter = new MyAdapter();
+        list.setAdapter(adapter);
+
 
         return view;
 
@@ -119,12 +126,13 @@ public class WallFragment extends Fragment {
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView userId;
-        ImageView image;
+        ImageView userImage;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-           // userId = itemView.findViewById(R.id.listrow_userTextView);
+           userId = itemView.findViewById(R.id.listrow_userTextView);
+           userImage = itemView.findViewById(R.id.listrow_ImageView);
         }
     }
 
@@ -147,14 +155,14 @@ public class WallFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            holder.userId.setText("First User");
+            holder.userId.setText(userList.get(position).getId());
 
         }
 
         @Override
         public int getItemCount() {
-            //return userList.size();
-            return 20;//TO CHANGE
+            return userList.size();
+
         }
     }
 
