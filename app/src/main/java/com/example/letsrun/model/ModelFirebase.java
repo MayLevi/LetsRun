@@ -66,10 +66,8 @@ public class ModelFirebase {
             }
         });
     }
-    public interface uploadImageListener{
-        public void onComplete(String url);
-    }
-    public void uploadImage(Bitmap imageBmp, String name, final uploadImageListener listener){
+
+    public void uploadImage(Bitmap imageBmp, String name, final Model.uploadImageListener listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference imagesRef = storage.getReference().child("images").child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

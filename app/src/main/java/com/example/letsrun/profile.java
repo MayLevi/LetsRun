@@ -1,11 +1,14 @@
 package com.example.letsrun;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.media.MediaBrowserServiceCompat;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
@@ -59,7 +62,7 @@ public class profile extends Fragment {
         saveChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                save();
+                save();
             }
         });
         runsBtn.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +80,27 @@ public class profile extends Fragment {
         });
 
         return view;
+    }
+
+    private void save() {
+        User user1=new User(userPass,userName.toString());
+        BitmapDrawable drawable=(BitmapDrawable) profilePic.getDrawable();
+        Bitmap bitmap=drawable.getBitmap();
+        Model.instance.uploadImage(bitmap, user1.getId(), new Model.uploadImageListener() {
+            @Override
+            public void onComplete(String url) {
+                if (url == null){
+                }else {
+                    user1.setImageUrl(url);
+                    Model.instance.addUser(user1, new Model.addUserListener() {
+                        @Override
+                        public void onComplete() {
+                            Navigation.findNavController(saveChange).popBackStack();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 //    private void edit() {
@@ -97,6 +121,15 @@ public class profile extends Fragment {
             // display error state to the user
         }
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE &&
+                resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            profilePic.setImageBitmap(imageBitmap);
+        }
     }
 
 

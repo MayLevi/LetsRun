@@ -2,7 +2,6 @@ package com.example.letsrun.model;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 
 import java.util.List;
 
@@ -40,7 +39,10 @@ public class Model {
     public void addUser(User user, addUserListener listener){
         modelFirebase.addUser(user,listener);
     }
-    public void uploadImage(Bitmap imageBmp, String name, final ModelFirebase.uploadImageListener listener) {
+    public interface uploadImageListener{
+        public void onComplete(String url);
+    }
+    public void uploadImage(Bitmap imageBmp, String name, final uploadImageListener listener) {
       modelFirebase.uploadImage(imageBmp,name,listener);
     }
 
