@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:background="#673AB7"
     tools:context=".LogInFragment">
 
     <LinearLayout
@@ -20,8 +21,8 @@
             android:layout_height="150dp"
             android:gravity="center"
             android:padding="32dp"
-            android:text="LOG IN"
-            android:textColor="@color/black"
+            android:text="Sign In"
+            android:textColor="@color/white"
             android:textSize="42sp" />
     </LinearLayout>
 
@@ -31,12 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:background="@color/black"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="8dp"
-        card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/linearLayout">

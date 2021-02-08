@@ -2,6 +2,8 @@ package com.example.letsrun;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -10,10 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Attr;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +35,12 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class AccountFragment extends Fragment {
 
-    ImageView imageView;
-    EditText editText_name,editText_email;
-    Button btn_login;
+    ImageButton imageButton;
+    EditText email_edittext,firstname_edittext,lastname_edittext,age_edittext,password_edittext,password_edittext2;
+    TextView textView_login,textview_logout;
+    LinearLayout linearLayout , linearLayout2;
+    Button btn_edit_update,btn_login;
+    CardView cardView;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -71,13 +87,104 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view =inflater.inflate(R.layout.fragment_account, container, false);
-        editText_name = view.findViewById(R.id.edittext_name);
+
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users");
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        email_edittext = view.findViewById(R.id.email_edittext);
+        firstname_edittext =view.findViewById(R.id.firstname_edittext);
+        lastname_edittext = view.findViewById(R.id.lastname_edittext);
+        age_edittext = view.findViewById(R.id.age_edittext);
+        password_edittext = view.findViewById(R.id.password_edittext);
+        password_edittext2 = view.findViewById(R.id.password_edittext2);
+        btn_edit_update = view.findViewById(R.id.btn_edit_update);
+        cardView = view.findViewById(R.id.cardView);
         btn_login = view.findViewById(R.id.btn_login);
+        linearLayout = view.findViewById(R.id.linearLayout);
+        linearLayout2 = view.findViewById(R.id.linearLayout2);
+        textView_login = view.findViewById(R.id.textView_login);
+        textview_logout = view.findViewById(R.id.textview_logout);
+        if(currentUser!=null){
+            //Query checkUser = database.orderByChild("id").equalTo(currentUser.getUid());
+
+            database.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    lastname_edittext.setText(snapshot.child(currentUser.getUid()).child("last name").getValue(String.class));
+                    email_edittext.setText(snapshot.child(currentUser.getUid()).child("email").getValue(String.class));
+                    firstname_edittext.setText(snapshot.child(currentUser.getUid()).child("first name").getValue(String.class));
+                    age_edittext.setText(snapshot.child(currentUser.getUid()).child("age").getValue(String.class));
+
+
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+//            checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+
+        }else{
+            linearLayout.setVisibility(View.GONE);
+            linearLayout2.setVisibility(View.VISIBLE);
+        }
+
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(getView()).navigate(R.id.action_global_menu_login);
+            }
+        });
+
+
+        btn_edit_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(btn_edit_update.getText().equals("EDIT"))
+                {
+                    btn_edit_update.setText("UPDATE");
+                    firstname_edittext.setEnabled(true);
+                    lastname_edittext.setEnabled(true);
+                    age_edittext.setEnabled(true);
+                }else{
+                    btn_edit_update.setText("EDIT");
+
+                    database.child(currentUser.getUid()).child("first name").setValue(firstname_edittext.getText()+"");
+                    database.child(currentUser.getUid()).child("last name").setValue(lastname_edittext.getText()+"");
+                    database.child(currentUser.getUid()).child("age").setValue(age_edittext.getText()+"");
+
+                    firstname_edittext.setEnabled(false);
+                    lastname_edittext.setEnabled(false);
+                    age_edittext.setEnabled(false);
+
+                }
+
+            }
+        });
+
+        textview_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Navigation.findNavController(getView()).navigate(R.id.action_global_menu_account);
 
             }
         });

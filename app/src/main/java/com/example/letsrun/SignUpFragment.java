@@ -22,6 +22,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,7 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
  */
 public class SignUpFragment extends Fragment {
 
-    private EditText email_edittext,password_edittext,password_edittext2;
+    private EditText email_edittext,password_edittext,password_edittext2,firstName,lastName,age;
     private Button btn_signUp;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
@@ -84,6 +87,9 @@ public class SignUpFragment extends Fragment {
         email_edittext = view.findViewById(R.id.email_edittext);
         password_edittext = view.findViewById(R.id.password_edittext);
         password_edittext2 = view.findViewById(R.id.password_edittext2);
+        firstName = view.findViewById(R.id.firstname_edittext);
+        lastName = view.findViewById(R.id.lastname_edittext);
+        age = view.findViewById(R.id.age_edittext);
         btn_signUp = view.findViewById(R.id.btn_signUp);
 
 
@@ -102,6 +108,7 @@ public class SignUpFragment extends Fragment {
         String email = email_edittext.getText().toString();
         String password = password_edittext.getText().toString();
         String password2 = password_edittext2.getText().toString();
+
 
         if(TextUtils.isEmpty(email)){
             email_edittext.setError("Please enter your email");
@@ -131,12 +138,14 @@ public class SignUpFragment extends Fragment {
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(true);
+
         firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    addToFirebase();
                     Toast.makeText(getActivity(),"Successfully registered",Toast.LENGTH_LONG).show();
-                    Navigation.findNavController(getView()).navigate(R.id.action_global_menu_login);
+                    Navigation.findNavController(getView()).navigate(R.id.action_global_menu_account);
 
 
 
@@ -145,8 +154,22 @@ public class SignUpFragment extends Fragment {
                 }
                 progressDialog.dismiss();
             }
+
+            private void addToFirebase() {
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getUid());
+                database.child("id").setValue(firebaseAuth.getUid());
+                database.child("email").setValue(email);
+                database.child("first name").setValue(firstName.getText().toString());
+                database.child("last name").setValue(lastName.getText().toString());
+                database.child("age").setValue(age.getText().toString());
+
+            }
+
+
         });
     }
+
+
 
     private boolean isValidEmail(String email){
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
