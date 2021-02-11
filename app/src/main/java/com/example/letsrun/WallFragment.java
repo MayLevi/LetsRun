@@ -155,7 +155,7 @@ public class WallFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            holder.userId.setText(userList.get(position).getId());
+            holder.userId.setText(userList.get(position).getUserName());
 
         }
 

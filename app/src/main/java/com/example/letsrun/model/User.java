@@ -4,7 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class User {
@@ -12,21 +17,39 @@ public class User {
 
     @PrimaryKey
     @NonNull
-    private String id;
-    private String name;
+    private String userName;
+    private String password;
     private String imageUrl;
-    //private List<RunningTracks> runs;
+    private Long lastUpdated;
 
-//    public List<RunningTracks> getRuns() {
-//        return runs;
-//    }
-//
-//    public void setRuns(List<RunningTracks> runs) {
-//        this.runs = runs;
-//    }
-public User(@NonNull String id, String name) {
-    this.id = id;
-    this.name = name;
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userName", userName);
+        result.put("password", password);
+        result.put("imageUrl", imageUrl);
+        result.put("lastUpdated", FieldValue.serverTimestamp());
+        return result;
+    }
+
+    public void fromMap(Map<String, Object> map){
+        userName = (String)map.get("userName");
+        password = (String)map.get("password");
+        imageUrl = (String)map.get("imageUrl");
+        Timestamp ts = (Timestamp)map.get("lastUpdated");
+        lastUpdated = ts.getSeconds();
+    }
+
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public User(@NonNull String userName, String password) {
+    this.userName = userName;
+    this.password = password;
 }
     public String getImageUrl() {
         return imageUrl;
@@ -35,19 +58,19 @@ public User(@NonNull String id, String name) {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public String getId() {
-        return id;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

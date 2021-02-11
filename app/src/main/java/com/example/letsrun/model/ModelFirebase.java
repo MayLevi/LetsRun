@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,10 +18,34 @@ import android.net.Uri;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ModelFirebase {
-    public void getAllFriends(Model.getAllFriendesListener listener) {
+    public interface getAllFriendsListener {
+        void onComplete(List<User> list);
     }
+    public void getAllFriends(long lastUpdated,getAllFriendsListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Timestamp ts = new Timestamp(lastUpdated,0);
+        db.collection("users").whereGreaterThanOrEqualTo("lastUpdated",ts).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<User> data = new LinkedList<User>();
+                if (task.isSuccessful()){
+                    for (DocumentSnapshot doc:task.getResult()) {
+                        User us = new User(null,null);
+                        us.fromMap(doc.getData());
+                        //Student st = doc.toObject(Student.class);
+                        data.add(us);
+                    }
+                }
+                listener.onComplete(data);
+            }
+        });
+    }
+
+
 
     public void addFriend(User user, Model.addFriendListener listener) {
     }
@@ -51,7 +76,7 @@ public class ModelFirebase {
 
     public void addUser(User user, Model.addUserListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(user.getId())
+        db.collection("users").document(user.getUserName())
                 .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -92,4 +117,5 @@ public class ModelFirebase {
             }
         });
     }
+
 }

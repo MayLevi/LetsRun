@@ -69,12 +69,12 @@ public class FriendsListFragment extends Fragment {
             return view;
         }
     }
-    void reloadData(){
-        Model.instance.getAllFriendes(new Model.getAllFriendesListener() {
-            @Override
-            public void onComplete(List<User> data) {
-                usersList=data;
-            }
-        });
-    }
+//    void reloadData(){
+//        Model.instance.getAllFriendes(new Model.getAllFriendesListener() {
+//            @Override
+//            public void onComplete(List<User> data) {
+//                usersList=data;
+//            }
+//        });
+//    }
 }

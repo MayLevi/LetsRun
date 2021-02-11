@@ -1,7 +1,13 @@
 package com.example.letsrun.model;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+
+import androidx.lifecycle.LiveData;
+
+import com.example.letsrun.MyApplication;
 
 import java.util.List;
 
@@ -12,13 +18,39 @@ public class Model {
     private Model(){
 
     }
-    public interface getAllFriendesListener {
-        void onComplete(List<User> list);
+    public interface getAllFriendsListener {
+        void onComplete();
     }
-    public void getAllFriendes(getAllFriendesListener listener){
-        modelFirebase.getAllFriends(listener);
+    LiveData<List<User>> friendsList;
+    public LiveData<List<User>> getAllFriends() {
+        if (friendsList == null){
+            friendsList = modelSql.getAllFriends();
+            refreshAllFriends(null);
+        }
+        return friendsList;
+    }
 
+    private void refreshAllFriends(final getAllFriendsListener listener) {
+        final SharedPreferences sp = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        long lastUpdated = sp.getLong("lastUpdated",0);
+        modelFirebase.getAllFriends(lastUpdated, new ModelFirebase.getAllFriendsListener() {
+            @Override
+            public void onComplete(List<User> result) {
+                long lastU = 0;
+                for (User s: result) {
+                    modelSql.addFriend(s,null);
+                    if (s.getLastUpdated()>lastU){
+                        lastU = s.getLastUpdated();
+                    }
+                }
+                sp.edit().putLong("lastUpdated", lastU).commit();
+                if(listener != null){
+                    listener.onComplete();
+                }
+            }
+        });
     }
+
     public interface addFriendListener {
         void onComplete();
     }

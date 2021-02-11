@@ -3,33 +3,21 @@ package com.example.letsrun.model;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
 public class ModelSql {
 
-    public interface getAllFriendesListener {
+    public LiveData<List<User>> getAllFriends() {
+       return AppLocalDB.db.UserDao().getAll();
+
+    }
+
+    public interface getAllFriendsListener {
         void onComplete(List<User> list);
     }
-    public void getAllFriendes(getAllFriendesListener listener){
-        class MyAsynchtask extends AsyncTask {
-            List<User> data;
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                data = AppLocalDB.db.UserDao().getAll();
 
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                listener.onComplete(data);
-            }
-        }
-        MyAsynchtask task= new MyAsynchtask();
-        task.execute();
-
-    }
     public interface addFriendListener {
         void onComplete();
     }

@@ -37,7 +37,7 @@ public class profile extends Fragment {
     ImageView profilePic;
     TextView userName;
     String userPass;
-    User user;
+    User user2;
 
 
     @Override
@@ -59,6 +59,15 @@ public class profile extends Fragment {
 //                edit();
             }
         });
+//        Model.instance.getUser(userPass,name, new Model.getUserListener() {
+//            @Override
+//            public void onComplete(User user) {
+//                user2=user;
+//                if (user.getImageUrl() != null){
+//                    Picasso.get().load(user.getImageUrl()).placeholder(R.drawable.runner).into(profilePic);
+//                }
+//            }
+//        });
         saveChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +95,7 @@ public class profile extends Fragment {
         User user1=new User(userPass,userName.toString());
         BitmapDrawable drawable=(BitmapDrawable) profilePic.getDrawable();
         Bitmap bitmap=drawable.getBitmap();
-        Model.instance.uploadImage(bitmap, user1.getId(), new Model.uploadImageListener() {
+        Model.instance.uploadImage(bitmap, user1.getUserName(), new Model.uploadImageListener() {
             @Override
             public void onComplete(String url) {
                 if (url == null){
