@@ -62,7 +62,7 @@ public class singing extends Fragment {
     }
 
     public void saveNewUser() {
-        User user=new User(userPass,userName);
+        User user = new User(userPass,userName,"","","");
 
     }
 }

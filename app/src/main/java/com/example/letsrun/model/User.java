@@ -17,23 +17,57 @@ public class User {
 
     @PrimaryKey
     @NonNull
-    private String userName;
-    private String password;
+    private String userId;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String age;
     private String imageUrl;
     private Long lastUpdated;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    @NonNull
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public void setUserId(@NonNull String userId) {
+        this.userId = userId;
+    }
+
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("userName", userName);
-        result.put("password", password);
+        result.put("email",email);
+        result.put("userId", userId);
+        result.put("firstName", firstName);
+        result.put("lastName", lastName);
+        result.put("age", age);
         result.put("imageUrl", imageUrl);
         result.put("lastUpdated", FieldValue.serverTimestamp());
         return result;
     }
 
     public void fromMap(Map<String, Object> map){
-        userName = (String)map.get("userName");
-        password = (String)map.get("password");
+        userId = (String)map.get("userId");
+        email = (String)map.get("email");
+        age = (String)map.get("age");
+        firstName = (String)map.get("firstName");
+        lastName = (String)map.get("lastName");
         imageUrl = (String)map.get("imageUrl");
         Timestamp ts = (Timestamp)map.get("lastUpdated");
         lastUpdated = ts.getSeconds();
@@ -47,9 +81,12 @@ public class User {
         this.lastUpdated = lastUpdated;
     }
 
-    public User(@NonNull String userName, String password) {
-    this.userName = userName;
-    this.password = password;
+    public User(@NonNull String userId ,String firstName, String lastName,String email,String age) {
+    this.userId=userId;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.age = age;
 }
     public String getImageUrl() {
         return imageUrl;
@@ -58,19 +95,19 @@ public class User {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public String getUserName() {
-        return userName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFirstName(String userName) {
+        this.firstName = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

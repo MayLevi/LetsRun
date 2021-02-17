@@ -4,12 +4,12 @@ import android.widget.ImageView;
 
 public class Post {
     private String userId,firstName,lastName,age,kilometers,text,location;
-    private ImageView img;
+    private String img;
 
-    private Post() {
+    public Post() {
     }
 
-    public Post(String userId, String firstName, String lastName, String age, String kilometers, String text, String location, ImageView img) {
+    public Post(String userId, String firstName, String lastName, String age, String kilometers, String text, String location, String img) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -48,7 +48,7 @@ public class Post {
         this.location = location;
     }
 
-    public void setImg(ImageView img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
@@ -80,7 +80,7 @@ public class Post {
         return location;
     }
 
-    public ImageView getImg() {
+    public String getImg() {
         return img;
     }
 }

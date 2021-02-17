@@ -94,10 +94,10 @@ public class profile extends Fragment {
     }
 
     private void save() {
-        User user1=new User(userPass,userName.toString());
+        User user1=new User(userPass,userName.toString(),"","","");
         BitmapDrawable drawable=(BitmapDrawable) profilePic.getDrawable();
         Bitmap bitmap=drawable.getBitmap();
-        Model.instance.uploadImage(bitmap, user1.getUserName(), new Model.uploadImageListener() {
+        Model.instance.uploadImage(bitmap, user1.getUserId(), new Model.uploadImageListener() {
             @Override
             public void onComplete(String url) {
                 if (url == null){

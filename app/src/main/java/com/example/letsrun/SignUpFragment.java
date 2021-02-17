@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.letsrun.model.Post;
+import com.example.letsrun.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +39,7 @@ public class SignUpFragment extends Fragment {
     private EditText email_edittext,password_edittext,password_edittext2,firstName,lastName,age;
     private Button btn_signUp;
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore db;
     private ProgressDialog progressDialog;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -147,8 +151,6 @@ public class SignUpFragment extends Fragment {
                     Toast.makeText(getActivity(),"Successfully registered",Toast.LENGTH_LONG).show();
                     Navigation.findNavController(getView()).navigate(R.id.action_global_menu_account);
 
-
-
                 }else{
                     Toast.makeText(getContext(),"Registration failed",Toast.LENGTH_LONG).show();
                 }
@@ -156,12 +158,13 @@ public class SignUpFragment extends Fragment {
             }
 
             private void addToFirebase() {
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getUid());
-                database.child("id").setValue(firebaseAuth.getUid());
-                database.child("email").setValue(email);
-                database.child("first name").setValue(firstName.getText().toString());
-                database.child("last name").setValue(lastName.getText().toString());
-                database.child("age").setValue(age.getText().toString());
+
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                User user = new User(currentUser.getUid(),firstName.getText().toString(),lastName.getText().toString(),email,age.getText().toString());
+
+                db = FirebaseFirestore.getInstance();
+                db.collection("users").document(currentUser.getUid()).set(user);
 
             }
 

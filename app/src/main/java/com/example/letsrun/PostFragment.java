@@ -7,17 +7,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.letsrun.model.Post;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -32,6 +43,10 @@ public class PostFragment extends Fragment {
     TextView textview_results;
     MapView mapView;
     int PLACE_PICKER_REQUEST = 1;
+    private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -95,6 +110,11 @@ public class PostFragment extends Fragment {
                 }
             }
         });
+
+        Post post = new Post("post", "post ."," "," "," "," "," "," ");
+
+        db = FirebaseFirestore.getInstance();
+        db.collection("posts").add(post);
 
         return view;
     }

@@ -34,7 +34,7 @@ public class ModelFirebase {
                 List<User> data = new LinkedList<User>();
                 if (task.isSuccessful()){
                     for (DocumentSnapshot doc:task.getResult()) {
-                        User us = new User(null,null);
+                        User us = new User(null,null,null,null,null);
                         us.fromMap(doc.getData());
                         //Student st = doc.toObject(Student.class);
                         data.add(us);
@@ -50,9 +50,9 @@ public class ModelFirebase {
     public void addFriend(User user, Model.addFriendListener listener) {
     }
 
-    public void getUser(String pass,String name,Model.getUserListener listener) {
+    public void getUser(String id,Model.getUserListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(pass).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("users").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 User user = null;
@@ -62,7 +62,7 @@ public class ModelFirebase {
                         user = task.getResult().toObject(User.class);
                     }
                     else{
-                        user=new User(pass,name);
+                        user=new User(id,null,null,null,null);
                         addUser(user, new Model.addUserListener() {
                             @Override
                             public void onComplete() { }
@@ -76,7 +76,7 @@ public class ModelFirebase {
 
     public void addUser(User user, Model.addUserListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(user.getUserName())
+        db.collection("users").document(user.getUserId())
                 .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

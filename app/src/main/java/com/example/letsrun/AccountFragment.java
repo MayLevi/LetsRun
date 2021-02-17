@@ -7,6 +7,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.letsrun.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 
 import org.w3c.dom.Attr;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +54,9 @@ public class AccountFragment extends Fragment {
     LinearLayout linearLayout , linearLayout2;
     Button btn_edit_update,btn_login;
     CardView cardView,cardView_profile;
+
+    private FirebaseFirestore db;
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -87,9 +103,7 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view =inflater.inflate(R.layout.fragment_account, container, false);
-
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users");
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -111,22 +125,35 @@ public class AccountFragment extends Fragment {
 
         if(currentUser!=null){
 
-            database.addValueEventListener(new ValueEventListener() {
+            db = FirebaseFirestore.getInstance();
+
+            final DocumentReference docRef = db.collection("users").document(currentUser.getUid());
+            Query query = db.collection("posts");
+
+            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    lastname_edittext.setText(snapshot.child(currentUser.getUid()).child("last name").getValue(String.class));
-                    email_edittext.setText(snapshot.child(currentUser.getUid()).child("email").getValue(String.class));
-                    firstname_edittext.setText(snapshot.child(currentUser.getUid()).child("first name").getValue(String.class));
-                    age_edittext.setText(snapshot.child(currentUser.getUid()).child("age").getValue(String.class));
+                public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w("TAG", "Listen failed.", e);
+                        return;
+                    }
 
-                }
+                    if (snapshot != null && snapshot.exists()) {
+                        Log.d("TAG", "Current data: " + snapshot.getData());
+                        //User user;
+                        Map<String,Object> b =snapshot.getData();
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                        lastname_edittext.setText((String) b.get("lastName"));
+                        email_edittext.setText((String) b.get("email"));
+                        firstname_edittext.setText((String) b.get("firstName"));
+                        age_edittext.setText((String) b.get("age"));
 
+                    } else {
+                        Log.d("TAG", "Current data: null");
+                    }
                 }
             });
-
 
         }else{
             linearLayout.setVisibility(View.GONE);
@@ -154,9 +181,10 @@ public class AccountFragment extends Fragment {
                 }else{
                     btn_edit_update.setText("EDIT");
 
-                    database.child(currentUser.getUid()).child("first name").setValue(firstname_edittext.getText()+"");
-                    database.child(currentUser.getUid()).child("last name").setValue(lastname_edittext.getText()+"");
-                    database.child(currentUser.getUid()).child("age").setValue(age_edittext.getText()+"");
+                    User user = new User(currentUser.getUid(),firstname_edittext.getText().toString(),lastname_edittext.getText().toString(),email_edittext.getText().toString(),age_edittext.getText().toString());
+
+                    db = FirebaseFirestore.getInstance();
+                    db.collection("users").document(currentUser.getUid()).set(user);
 
                     firstname_edittext.setEnabled(false);
                     lastname_edittext.setEnabled(false);
