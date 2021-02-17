@@ -1,5 +1,6 @@
 package com.example.letsrun;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.letsrun.model.Model;
+import com.example.letsrun.model.Post;
 import com.example.letsrun.model.User;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,8 +48,12 @@ public class WallFragment extends Fragment {
     private String mParam2;
 
 
-    RecyclerView list;
     LinkedList<User> userList = new LinkedList<>();
+
+    private FirebaseFirestore db;
+    private RecyclerView list;
+    FirestoreRecyclerAdapter adapter;
+
 
     public WallFragment() {
         // Required empty public constructor
@@ -83,87 +93,68 @@ public class WallFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        userList.add(new User("052","Ron"));
-        userList.add(new User("053","Ron"));
-        userList.add(new User("054","Ron"));
-        userList.add(new User("055","Ron"));
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wall, container, false);
 
 
-        ////
-        // Create RecyclerView
-        list = (RecyclerView) view.findViewById(R.id.wall_recycler_view);
-        list.hasFixedSize();
+        db = FirebaseFirestore.getInstance();
+        list = view.findViewById(R.id.wall_recycler_view);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        list.setLayoutManager(layoutManager);
+        //Query
+        Query query = db.collection("posts");
 
-//        Model.instance.getAllFriendes(new Model.getAllFriendesListener() {
-//            @Override
-//            public void onComplete(List<User> list) {
-//                //userList = list;
-//
-//                for(User userList: list)
-//                {
-//                    Log.d("TAG","User ID: " + userList.getId());
-//                }
-//            }
-//        });
+        FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
+                .setQuery(query,Post.class)
+                .build();
+
+        adapter = new FirestoreRecyclerAdapter<Post, PostsViewHolder>(options) {
+            @NonNull
+            @Override
+            public PostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row,parent,false);
+                return new PostsViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull PostsViewHolder postsViewHolder, int i, @NonNull Post post) {
+                postsViewHolder.listrow_userTextView.setText(post.getFirstName() + " " + post.getLastName());
+                postsViewHolder.listrow_km.setText(post.getKilometers());
+            }
+        };
 
 
-// TO FIX
-        MyAdapter adapter = new MyAdapter();
+
+        list.setHasFixedSize(true);
+        list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);
-
-
         return view;
 
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView userId;
-        ImageView userImage;
 
-        public MyViewHolder(@NonNull View itemView) {
+    private class PostsViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView listrow_userTextView;
+        private TextView listrow_km;
+        private ImageView listrow_ImageView;
+
+        public PostsViewHolder(@NonNull View itemView) {
             super(itemView);
-
-           userId = itemView.findViewById(R.id.listrow_userTextView);
-           userImage = itemView.findViewById(R.id.listrow_ImageView);
+            listrow_userTextView = itemView.findViewById(R.id.listrow_userTextView);
+            listrow_km = itemView.findViewById(R.id.listrow_km);
+            listrow_ImageView = itemView.findViewById(R.id.listrow_ImageView);
         }
     }
 
-    interface OnItemClickListener{
-        void onItemClick(int position);
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
     }
 
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
-        private OnItemClickListener listener ;
-        void setOnClickListener(OnItemClickListener listener){
-            this.listener = listener;
-        }
-        @NonNull
-        @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row,parent,false);
-            MyViewHolder holder = new MyViewHolder(view);
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            holder.userId.setText(userList.get(position).getUserName());
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return userList.size();
-
-        }
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
-
 }

@@ -40,7 +40,7 @@ public class AccountFragment extends Fragment {
     TextView textView_login,textview_logout;
     LinearLayout linearLayout , linearLayout2;
     Button btn_edit_update,btn_login;
-    CardView cardView;
+    CardView cardView,cardView_profile;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -107,8 +107,9 @@ public class AccountFragment extends Fragment {
         linearLayout2 = view.findViewById(R.id.linearLayout2);
         textView_login = view.findViewById(R.id.textView_login);
         textview_logout = view.findViewById(R.id.textview_logout);
+        cardView_profile = view.findViewById(R.id.cardView_profile);
+
         if(currentUser!=null){
-            //Query checkUser = database.orderByChild("id").equalTo(currentUser.getUid());
 
             database.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -118,9 +119,6 @@ public class AccountFragment extends Fragment {
                     firstname_edittext.setText(snapshot.child(currentUser.getUid()).child("first name").getValue(String.class));
                     age_edittext.setText(snapshot.child(currentUser.getUid()).child("age").getValue(String.class));
 
-
-
-
                 }
 
                 @Override
@@ -128,23 +126,12 @@ public class AccountFragment extends Fragment {
 
                 }
             });
-//            checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//
-//                }
-//            });
+
 
         }else{
             linearLayout.setVisibility(View.GONE);
             linearLayout2.setVisibility(View.VISIBLE);
+            cardView_profile.setVisibility(View.INVISIBLE);
         }
 
         btn_login.setOnClickListener(new View.OnClickListener() {
