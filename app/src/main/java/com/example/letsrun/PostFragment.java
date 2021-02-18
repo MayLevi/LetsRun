@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.letsrun.model.Post;
@@ -39,12 +40,14 @@ import static android.app.Activity.RESULT_OK;
  */
 public class PostFragment extends Fragment {
 
-    Button btn_location;
+    Button btn_location,btn_post;
     TextView textview_results;
     MapView mapView;
     int PLACE_PICKER_REQUEST = 1;
     private FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
+
+    EditText edittext_info,edittext_kilometers,edittext_Date,edittext_location,edittext_cotact;
 
 
 
@@ -94,9 +97,18 @@ public class PostFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
+        ///
         textview_results = view.findViewById(R.id.textview_results);
         mapView = view.findViewById(R.id.mapView);
         btn_location =view.findViewById(R.id.btn_location);
+        btn_post = view.findViewById(R.id.btn_post);
+        edittext_location = view.findViewById(R.id.edittext_location);
+        edittext_cotact = view.findViewById(R.id.edittext_cotact);
+        edittext_Date = view.findViewById(R.id.edittext_Date);
+        edittext_info = view.findViewById(R.id.edittext_info);
+        edittext_kilometers = view.findViewById(R.id.edittext_kilometers);
+        ///
+
         btn_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,6 +136,7 @@ public class PostFragment extends Fragment {
         if(requestCode==PLACE_PICKER_REQUEST){
             if(resultCode== RESULT_OK){
                 Place place = PlacePicker.getPlace(data,this.getContext());
+                mapView.getDisplay();
                 StringBuilder stringBuilder = new StringBuilder();
                 String latitude = String.valueOf(place.getLatLng().latitude);
                 String longitude = String.valueOf(place.getLatLng().longitude);
@@ -133,10 +146,6 @@ public class PostFragment extends Fragment {
                 stringBuilder.append("LONGITUDE :");
                 stringBuilder.append(longitude);
                 textview_results.setText(stringBuilder.toString());
-
-
-
-
             }
         }
     }
