@@ -128,8 +128,6 @@ public class AccountFragment extends Fragment {
             db = FirebaseFirestore.getInstance();
 
             final DocumentReference docRef = db.collection("users").document(currentUser.getUid());
-            Query query = db.collection("posts");
-
             docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot snapshot,

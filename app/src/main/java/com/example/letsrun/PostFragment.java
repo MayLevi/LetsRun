@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -109,6 +110,8 @@ public class PostFragment extends Fragment {
         edittext_kilometers = view.findViewById(R.id.edittext_kilometers);
         ///
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
         btn_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,10 +126,19 @@ public class PostFragment extends Fragment {
             }
         });
 
-        Post post = new Post("post", "post ."," "," "," "," "," "," ");
+        btn_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db = FirebaseFirestore.getInstance();
+                Post post = new Post(firebaseAuth.getCurrentUser().getUid(), "first",
+                        "last","18",edittext_kilometers.getText().toString() + "km"
+                        ,edittext_info.getText().toString(),edittext_location.getText().toString()," ");
+                db.collection("posts").add(post);
+                Navigation.findNavController(getView()).navigate(R.id.action_global_menu_wall);
+            }
+        });
 
-        db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(post);
+
 
         return view;
     }
