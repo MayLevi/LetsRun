@@ -26,6 +26,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -119,6 +120,12 @@ public class WallFragment extends Fragment {
             protected void onBindViewHolder(@NonNull PostsViewHolder postsViewHolder, int i, @NonNull Post post) {
                 postsViewHolder.listrow_userTextView.setText(post.getFirstName() + " " + post.getLastName());
                 postsViewHolder.listrow_km.setText(post.getKilometers());
+                String url = post.getImg();
+
+                if(url!=null){
+                    Picasso.get().load(url).placeholder(R.drawable.avatar).into(postsViewHolder.listrow_ImageView);
+                }
+
             }
         };
 

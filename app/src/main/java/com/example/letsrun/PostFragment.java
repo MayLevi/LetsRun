@@ -14,9 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.letsrun.model.Model;
 import com.example.letsrun.model.Post;
+import com.example.letsrun.model.User;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -24,9 +27,10 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,12 +48,14 @@ public class PostFragment extends Fragment {
     Button btn_location,btn_post;
     TextView textview_results;
     MapView mapView;
+    ImageView listrow_ImageView;
     int PLACE_PICKER_REQUEST = 1;
     private FirebaseFirestore db;
-    private FirebaseAuth firebaseAuth;
+//    private FirebaseAuth firebaseAuth;
+    User currentUser;
+
 
     EditText edittext_info,edittext_kilometers,edittext_Date,edittext_location,edittext_cotact;
-
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -92,6 +98,9 @@ public class PostFragment extends Fragment {
         }
     }
 
+    User user = new User();
+    User u = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -108,10 +117,11 @@ public class PostFragment extends Fragment {
         edittext_Date = view.findViewById(R.id.edittext_Date);
         edittext_info = view.findViewById(R.id.edittext_info);
         edittext_kilometers = view.findViewById(R.id.edittext_kilometers);
+        listrow_ImageView = view.findViewById(R.id.listrow_ImageView);
         ///
 
-        firebaseAuth = FirebaseAuth.getInstance();
-
+//        firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = new User();
         btn_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,22 +136,42 @@ public class PostFragment extends Fragment {
             }
         });
 
-        btn_post.setOnClickListener(new View.OnClickListener() {
+        Model.instance.getCurrentUser(new Model.getUserListener() {
             @Override
-            public void onClick(View view) {
-                db = FirebaseFirestore.getInstance();
-                Post post = new Post(firebaseAuth.getCurrentUser().getUid(), "first",
-                        "last","18",edittext_kilometers.getText().toString() + "km"
-                        ,edittext_info.getText().toString(),edittext_location.getText().toString()," ");
-                db.collection("posts").add(post);
-                Navigation.findNavController(getView()).navigate(R.id.action_global_menu_wall);
+            public void onComplete(User user) {
+                currentUser = user;
+                postClick(user);
             }
+
         });
 
+//        Model.instance.getUser("7JM8YunqeHdEIALhpxMbgnYVez43", new Model.getUserListener() {
+//            @Override
+//            public void onComplete(User user) {
+//
+//
+//            }
+//        });
 
 
         return view;
     }
+
+    private void postClick(User user) {
+        btn_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db = FirebaseFirestore.getInstance();
+                Post post = new Post(currentUser.getUserId(), currentUser.getFirstName(),
+                        currentUser.getLastName(),currentUser.getAge(),edittext_kilometers.getText().toString() + "km"
+                        ,edittext_info.getText().toString(),edittext_location.getText().toString(),currentUser.getImageUrl());
+                db.collection("posts").add(post);
+
+                Navigation.findNavController(getView()).navigate(R.id.action_global_menu_wall);
+            }
+        });
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

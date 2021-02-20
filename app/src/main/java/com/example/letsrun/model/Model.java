@@ -12,16 +12,19 @@ import com.example.letsrun.MyApplication;
 import java.util.List;
 
 public class Model {
+
     public final static Model instance=new Model();
     ModelFirebase modelFirebase=new ModelFirebase();
     ModelSql modelSql=new ModelSql();
-    private Model(){
 
-    }
+    private Model(){}
+
     public interface getAllFriendsListener {
         void onComplete();
     }
+
     LiveData<List<User>> friendsList;
+
     public LiveData<List<User>> getAllFriends() {
         if (friendsList == null){
             friendsList = modelSql.getAllFriends();
@@ -62,8 +65,18 @@ public class Model {
         void onComplete(User user);
     }
 
-    public void getUser(final String id,String firstName, getUserListener listener){
+    public void getUser(final String id, getUserListener listener){
         modelFirebase.getUser(id,listener);
+    }
+
+    public interface getCurrentUserIdListener{
+        void onComplete(String id);
+    }
+    public void getCurrentUserId(getCurrentUserIdListener listener){
+        modelFirebase.getCurrentUserId(listener);
+    }
+    public void getCurrentUser( getUserListener listener){
+        modelFirebase.getCurrentUser(listener);
     }
     public interface addUserListener {
         void onComplete();

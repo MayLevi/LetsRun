@@ -32,17 +32,24 @@
             android:padding="8dp">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/imagView_profile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="#52000000"
-                tools:src="@drawable/ic_baseline_add_photo_alternate_24" />
+                app:srcCompat="@drawable/avatar" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/btn_profileAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Edit" />
+
+            <Button
+                android:id="@+id/btn_profileAvatarSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:visibility="gone"
+                tools:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout

@@ -1,12 +1,22 @@
 package com.example.letsrun;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.letsrun.model.Model;
 import com.example.letsrun.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +52,9 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccountFragment#newInstance} factory method to
@@ -48,11 +62,11 @@ import javax.annotation.Nullable;
  */
 public class AccountFragment extends Fragment {
 
-    ImageButton imageButton;
+    ImageView imagView_profile;
     EditText email_edittext,firstname_edittext,lastname_edittext,age_edittext,password_edittext,password_edittext2;
     TextView textView_login,textview_logout;
     LinearLayout linearLayout , linearLayout2;
-    Button btn_edit_update,btn_login;
+    Button btn_edit_update,btn_login,btn_profileAvatar,btn_profileAvatarSave;
     CardView cardView,cardView_profile;
 
     private FirebaseFirestore db;
@@ -122,6 +136,53 @@ public class AccountFragment extends Fragment {
         textView_login = view.findViewById(R.id.textView_login);
         textview_logout = view.findViewById(R.id.textview_logout);
         cardView_profile = view.findViewById(R.id.cardView_profile);
+        btn_profileAvatar = view.findViewById(R.id.btn_profileAvatar);
+        imagView_profile = view.findViewById(R.id.imagView_profile);
+        btn_profileAvatarSave = view.findViewById(R.id.btn_profileAvatarSave);
+
+        btn_profileAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btn_profileAvatar.setVisibility(view.GONE);
+                btn_profileAvatarSave.setVisibility(view.VISIBLE);
+                editImage();
+
+
+            }
+        });
+
+        btn_profileAvatarSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btn_profileAvatarSave.setVisibility(view.GONE);
+                btn_profileAvatar.setVisibility(view.VISIBLE);
+                ///////
+                BitmapDrawable drawable=(BitmapDrawable) imagView_profile.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                Model.instance.uploadImage(bitmap, "myid", new Model.uploadImageListener() {
+                    @Override
+                    public void onComplete(String url) {
+                        if(url==null){
+
+                        }else{
+                            Model.instance.getCurrentUser(new Model.getUserListener() {
+                                @Override
+                                public void onComplete(User user) {
+                                    user.setImageUrl(url);
+                                    Model.instance.addUser(user, new Model.addUserListener() {
+                                        @Override
+                                        public void onComplete() {
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+                ///////
+            }
+        });
 
         if(currentUser!=null){
 
@@ -146,6 +207,8 @@ public class AccountFragment extends Fragment {
                         email_edittext.setText((String) b.get("email"));
                         firstname_edittext.setText((String) b.get("firstName"));
                         age_edittext.setText((String) b.get("age"));
+
+
 
                     } else {
                         Log.d("TAG", "Current data: null");
@@ -203,5 +266,74 @@ public class AccountFragment extends Fragment {
         });
 
         return view;
+    }
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+//    private void editImage() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if(takePictureIntent.resolveActivity(getActivity().getPackageManager())!=null){
+//            startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+//        }
+//    }
+
+    private void editImage() {
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Choose your profile picture");
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Take Photo")) {
+                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, 0);
+
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto , 1);
+
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != RESULT_CANCELED) {
+            switch (requestCode) {
+                case 0:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        imagView_profile.setImageBitmap(selectedImage);
+                    }
+
+                    break;
+                case 1:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Uri selectedImage =  data.getData();
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                        if (selectedImage != null) {
+                            Cursor cursor = getActivity().getContentResolver().query(selectedImage,
+                                    filePathColumn, null, null, null);
+                            if (cursor != null) {
+                                cursor.moveToFirst();
+
+                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                                String picturePath = cursor.getString(columnIndex);
+                                imagView_profile.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                                cursor.close();
+                            }
+                        }
+
+                    }
+                    break;
+            }
+        }
     }
 }

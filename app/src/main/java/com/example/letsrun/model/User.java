@@ -25,6 +25,10 @@ public class User {
     private String imageUrl;
     private Long lastUpdated;
 
+    public User() {
+
+    }
+
     public String getEmail() {
         return email;
     }
