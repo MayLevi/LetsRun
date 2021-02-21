@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="#673AB7"
+    android:background="@drawable/run"
     tools:context=".LogInFragment">
 
     <LinearLayout
@@ -118,9 +118,13 @@
                     android:layout_weight="1"
 
                     android:clickable="false"
+                    android:isScrollContainer="false"
                     android:tag="facebook_login_button"
                     android:text="SIGN UP WITH FACEBOOK"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    card_view:icon="@drawable/facebook_icon"
+                    card_view:iconGravity="start"
+                    card_view:iconSize="15dp" />
 
                 <Button
                     android:id="@+id/google_login_button"
@@ -131,7 +135,9 @@
                     android:clickable="false"
                     android:tag="google_login_button"
                     android:text="SIGN UP WITH GOOGLE"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    card_view:icon="@drawable/googleg_standard_color_18"
+                    card_view:iconGravity="start" />
 
                 <Button
                     android:id="@+id/logout_button"

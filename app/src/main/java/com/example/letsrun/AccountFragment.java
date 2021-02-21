@@ -60,7 +60,10 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link AccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountFragment extends Fragment {
+public class
+
+
+AccountFragment extends Fragment {
 
     ImageView imagView_profile;
     EditText email_edittext,firstname_edittext,lastname_edittext,age_edittext,password_edittext,password_edittext2;
