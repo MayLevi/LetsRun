@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,14 @@ import android.view.ViewGroup;
 import com.example.letsrun.model.FirestoreAdapter;
 import com.example.letsrun.model.Post;
 import com.example.letsrun.model.User;
+import java.util.LinkedList;
+
+//TODO delete this imports
 import com.firebase.ui.firestore.SnapshotParser;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import java.util.LinkedList;
 
 public class WallFragment extends Fragment implements FirestoreAdapter.OnListItemClick {
 

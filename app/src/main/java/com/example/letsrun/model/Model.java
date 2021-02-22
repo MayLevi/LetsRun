@@ -32,7 +32,10 @@ public class Model {
 
     private Model(){}
 
-    public interface logInListener {
+    public void logOut() {
+        ModelFirebase.logOut();
+    }
+        public interface logInListener {
         void onComplete();
     }
     public void logIn(String email, String password, View view){
@@ -40,6 +43,13 @@ public class Model {
 
     }
 
+    public void signUp(String email, String password,String firstName,String lastName,String age,View view){
+        ModelFirebase.signUp(email, password,firstName,lastName,age,view);
+
+    }
+    public void postByUser(User user, String kilometers,String text,String location){
+        ModelFirebase.postByUser(user,kilometers,text,location);
+    }
 
     public interface getAllFriendsListener {
         void onComplete();

@@ -12,8 +12,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
@@ -33,17 +31,6 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import javax.annotation.Nullable;
 
-//TODO delete this imports
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-//////
 
 
 public class AccountFragment extends Fragment {
@@ -55,49 +42,11 @@ public class AccountFragment extends Fragment {
     Button btn_edit_update,btn_login,btn_profileAvatar,btn_profileAvatarSave;
     CardView cardView,cardView_profile;
 
-    private FirebaseFirestore db;
-
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AccountFragment() {
-        // Required empty public constructor
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_account, container, false);
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users");
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         email_edittext = view.findViewById(R.id.email_edittext);
         firstname_edittext =view.findViewById(R.id.firstname_edittext);
@@ -171,43 +120,26 @@ public class AccountFragment extends Fragment {
             }
         });
 
-        if(currentUser!=null){
-
-            db = FirebaseFirestore.getInstance();
-
-            final DocumentReference docRef = db.collection("users").document(currentUser.getUid());
-            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                    @Nullable FirebaseFirestoreException e) {
-                    if (e != null) {
-                        Log.w("TAG", "Listen failed.", e);
-                        return;
-                    }
-
-                    if (snapshot != null && snapshot.exists()) {
-                        Log.d("TAG", "Current data: " + snapshot.getData());
-                        //User user;
-                        Map<String,Object> b =snapshot.getData();
-
-                        lastname_edittext.setText((String) b.get("lastName"));
-                        email_edittext.setText((String) b.get("email"));
-                        firstname_edittext.setText((String) b.get("firstName"));
-                        age_edittext.setText((String) b.get("age"));
-
-
-
-                    } else {
-                        Log.d("TAG", "Current data: null");
-                    }
+        Model.instance.getCurrentUserId(new Model.getCurrentUserIdListener() {
+            @Override
+            public void onComplete(String id) {
+                if(id!=null){
+                    Model.instance.getUser(id, new Model.getUserListener() {
+                        @Override
+                        public void onComplete(User user) {
+                            lastname_edittext.setText(user.getLastName());
+                            email_edittext.setText(user.getEmail());
+                            firstname_edittext.setText(user.getFirstName());
+                            age_edittext.setText(user.getAge());
+                        }
+                    });
+                }else{
+                    linearLayout.setVisibility(View.GONE);
+                    linearLayout2.setVisibility(View.VISIBLE);
+                    cardView_profile.setVisibility(View.INVISIBLE);
                 }
-            });
-
-        }else{
-            linearLayout.setVisibility(View.GONE);
-            linearLayout2.setVisibility(View.VISIBLE);
-            cardView_profile.setVisibility(View.INVISIBLE);
-        }
+            }
+        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,10 +161,21 @@ public class AccountFragment extends Fragment {
                 }else{
                     btn_edit_update.setText("EDIT");
 
-                    User user = new User(currentUser.getUid(),firstname_edittext.getText().toString(),lastname_edittext.getText().toString(),email_edittext.getText().toString(),age_edittext.getText().toString());
+                    Model.instance.getCurrentUserId(new Model.getCurrentUserIdListener() {
+                        @Override
+                        public void onComplete(String id) {
 
-                    db = FirebaseFirestore.getInstance();
-                    db.collection("users").document(currentUser.getUid()).set(user);
+                                    User u = new User(id,firstname_edittext.getText().toString(),lastname_edittext.getText().toString(),email_edittext.getText().toString(),age_edittext.getText().toString());
+
+                                    Model.instance.addUser(u, new Model.addUserListener() {
+                                        @Override
+                                        public void onComplete() {
+                                            Log.d("TAG1","BINGO!");
+                                        }
+                                    });
+                        }
+                    });
+
 
                     firstname_edittext.setEnabled(false);
                     lastname_edittext.setEnabled(false);
@@ -246,7 +189,7 @@ public class AccountFragment extends Fragment {
         textview_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
+                Model.instance.logOut();
                 Navigation.findNavController(getView()).navigate(R.id.action_global_menu_account);
 
             }
@@ -255,13 +198,6 @@ public class AccountFragment extends Fragment {
         return view;
     }
     static final int REQUEST_IMAGE_CAPTURE = 1;
-
-//    private void editImage() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if(takePictureIntent.resolveActivity(getActivity().getPackageManager())!=null){
-//            startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
-//        }
-//    }
 
     private void editImage() {
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };

@@ -5,9 +5,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.letsrun.MyApplication;
 import com.example.letsrun.R;
-import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,11 +12,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -47,6 +43,41 @@ import javax.annotation.Nullable;
 public class ModelFirebase {
 
 
+    public static void signUp(String email, String password,String firstName,String lastName,String age,View view){
+        FirebaseAuth firebaseAuth;
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                ProgressDialog progressDialog;
+                progressDialog = new ProgressDialog(MyApplication.context);
+
+                if(task.isSuccessful()){
+                    addToFirebase(firstName,lastName,email,age);
+                    Toast.makeText(MyApplication.context,"Successfully registered",Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(view).navigate(R.id.action_global_menu_account);
+
+                }else{
+                    Toast.makeText(MyApplication.context,"Registration failed",Toast.LENGTH_LONG).show();
+                }
+                progressDialog.dismiss();
+            }
+
+            private void addToFirebase(String firstName,String lastName,String email,String age) {
+
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                User user = new User(currentUser.getUid(),firstName,lastName,email,age);
+                FirebaseFirestore db;
+                db = FirebaseFirestore.getInstance();
+                db.collection("users").document(currentUser.getUid()).set(user);
+
+            }
+
+
+        });
+
+    }
     public static void logIn(String email, String password, View view){
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
@@ -105,33 +136,6 @@ public class ModelFirebase {
 
     public void getUser(String id,Model.getUserListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("users").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                User user = null;
-//                if (task.isSuccessful()){
-//
-//                    DocumentSnapshot doc = task.getResult();
-//
-//                    if (doc != null) {
-//
-//                        user = task.getResult().toObject(User.class);
-//
-//                        Log.d("TAG","not else.");
-//
-//                    } else{
-//                        Log.d("TAG"," else.");
-//
-//                        user=new User(id,null,null,null,null);
-//                        addUser(user, new Model.addUserListener() {
-//                            @Override
-//                            public void onComplete() { }
-//                        });
-//                    }
-//                }
-//                listener.onComplete(user);
-//            }
-//        });
         User user = new User();
 
         DocumentReference docRef = db.collection("users").document(id);
@@ -191,6 +195,20 @@ public class ModelFirebase {
         });
     }
 
+    public static void postByUser(User user, String kilometers, String text, String location){
+        FirebaseFirestore db;
+
+        db = FirebaseFirestore.getInstance();
+        Post post = new Post(user.getUserId(), user.getFirstName(),
+                user.getLastName(),user.getAge(),kilometers + "km"
+                ,text,location,user.getImageUrl());
+        db.collection("posts").add(post);
+    }
+
+    public static void logOut(){
+        FirebaseAuth.getInstance().signOut();
+
+    }
 
 }
 

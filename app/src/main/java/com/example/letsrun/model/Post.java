@@ -4,15 +4,14 @@ import android.widget.ImageView;
 
 public class Post {
 
-    private String postId,userId,firstName,lastName,age,kilometers,text,location;
-    private String img;
+    private String postId,userId,firstName,lastName,age,kilometers,text,location,img,likes;
 
     //Constructors
     public Post() {}
     //TODO add postId to constructor
     public Post(String userId, String firstName, String lastName, String age, String kilometers, String text, String location, String img) {
         this.postId = postId;
-
+        this.likes = likes;
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,6 +21,7 @@ public class Post {
         this.location = location;
         this.img = img;
     }
+
 
     //Setters
     public void setUserId(String userId) {
@@ -51,6 +51,8 @@ public class Post {
     public void setPostId(String postId) {
         this.postId = postId;
     }
+    public void setLikes(String likes) { this.likes = likes; }
+
 
     //Getters
     public String getUserId() {
@@ -77,6 +79,7 @@ public class Post {
     public String getImg() {
         return img;
     }
+    public String getLikes() { return likes; }
     public String getPostId() {
         return postId;
     }
