@@ -1,11 +1,19 @@
 package com.example.letsrun.model;
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.letsrun.MyApplication;
+import com.example.letsrun.R;
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -16,10 +24,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
@@ -29,6 +45,28 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 public class ModelFirebase {
+
+
+    public static void logIn(String email, String password, View view){
+        FirebaseAuth firebaseAuth;
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                ProgressDialog progressDialog = new ProgressDialog(MyApplication.context);
+                if(task.isSuccessful()){
+                    Toast.makeText(MyApplication.context,"Successfully logged in",Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(view).navigate(R.id.menu_wall);
+
+
+                }else{
+                    Toast.makeText(MyApplication.context,"Log in failed",Toast.LENGTH_LONG).show();
+                }
+                progressDialog.dismiss();
+            }
+        });
+
+    }
     public void getCurrentUser(Model.getUserListener listener) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         getUser(firebaseAuth.getUid(),listener);
@@ -153,4 +191,6 @@ public class ModelFirebase {
         });
     }
 
+
 }
+

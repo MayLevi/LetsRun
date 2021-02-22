@@ -136,14 +136,14 @@ public class PostFragment extends Fragment {
             }
         });
 
-        Model.instance.getCurrentUser(new Model.getUserListener() {
-            @Override
-            public void onComplete(User user) {
-                currentUser = user;
-                postClick(user);
-            }
-
-        });
+//        Model.instance.getCurrentUser(new Model.getUserListener() {
+//            @Override
+//            public void onComplete(User user) {
+//                currentUser = user;
+//                postClick(user);
+//            }
+//
+//        });
 
 //        Model.instance.getUser("7JM8YunqeHdEIALhpxMbgnYVez43", new Model.getUserListener() {
 //            @Override

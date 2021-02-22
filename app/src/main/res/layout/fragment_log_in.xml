@@ -18,9 +18,9 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="32dp"
+            android:padding="26dp"
             android:text="Sign In"
             android:textColor="@color/white"
             android:textSize="42sp" />
@@ -77,22 +77,6 @@
                     android:text="SIGN IN"
                     android:textColor="@color/white" />
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="or" />
-
-                <Button
-                    android:id="@+id/btn_signUp"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:tag="custom_signup_button"
-                    android:text="SIGN UP"
-                    android:textColor="@color/white" />
-
             </LinearLayout>
 
 
@@ -109,37 +93,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Don't have an account yet?  Sign Up" />
 
                 <Button
-                    android:id="@+id/facebook_login_button"
+                    android:id="@+id/btn_signUp"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
                     android:layout_weight="1"
-
-                    android:clickable="false"
-                    android:tag="facebook_login_button"
-                    android:text="SIGN UP WITH FACEBOOK"
-                    android:textColor="@color/white" />
-
-                <Button
-                    android:id="@+id/google_login_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-
-                    android:clickable="false"
-                    android:tag="google_login_button"
-                    android:text="SIGN UP WITH GOOGLE"
-                    android:textColor="@color/white" />
-
-                <Button
-                    android:id="@+id/logout_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:clickable="false"
-                    android:text="LOG OUT"
+                    android:tag="custom_signup_button"
+                    android:text="SIGN UP"
                     android:textColor="@color/white" />
 
             </LinearLayout>

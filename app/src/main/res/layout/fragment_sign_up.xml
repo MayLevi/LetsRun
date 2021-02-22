@@ -6,130 +6,142 @@
     android:layout_height="match_parent"
     android:background="#673AB7"
     tools:context=".SignUpFragment">
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="32dp"
-            android:text="Sign Up"
-            android:textColor="@color/white"
-            android:textSize="42sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Create an account"
-            android:textColor="#AEFFFFFF"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/black"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="8dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
 
+    <!-- everything you already have -->
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/email_edittext"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Email"
-                android:inputType="textEmailAddress" />
+                android:gravity="center"
+                android:padding="26dp"
+                android:text="Sign Up"
+                android:textColor="@color/white"
+                android:textSize="42sp" />
 
-
-            <EditText
-                android:id="@+id/firstname_edittext"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="First name"
-                android:inputType="text"
-                 />
+                android:gravity="center"
+                android:text="Create an account"
+                android:textColor="#AEFFFFFF"
+                android:textSize="18sp" />
+        </LinearLayout>
 
-            <EditText
-                android:id="@+id/lastname_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Last name"
-                android:inputType="text" />
+        <androidx.cardview.widget.CardView
 
-            <EditText
-                android:id="@+id/age_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Age"
-                android:inputType="number" />
-
-            <EditText
-                android:id="@+id/password_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Password"
-                android:inputType="textPassword" />
-
-            <EditText
-                android:id="@+id/password_edittext2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Password"
-                android:inputType="textPassword" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/black"
+            card_view:cardCornerRadius="10dp"
+            card_view:cardElevation="8dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
+                android:gravity="top"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <EditText
+                    android:id="@+id/email_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress" />
 
 
-                <Button
-                    android:id="@+id/btn_signUp"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:background="#FFFFFF"
-                    android:tag="custom_signup_button"
-                    android:text="SIGN UP"
-                    android:textColor="@color/white"
-                    card_view:backgroundTint="@color/purple_500" />
+                <EditText
+                    android:id="@+id/firstname_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="First name"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/lastname_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Last name"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/age_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Age"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/password_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Password"
+                    android:inputType="textPassword" />
+
+                <EditText
+                    android:id="@+id/password_edittext2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Password"
+                    android:inputType="textPassword" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:id="@+id/btn_signUp"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:background="#FFFFFF"
+                        android:tag="custom_signup_button"
+                        android:text="SIGN UP"
+                        android:textColor="@color/white"
+                        card_view:backgroundTint="@color/purple_500" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
+    </TableLayout>
+    </ScrollView>
 
-    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
