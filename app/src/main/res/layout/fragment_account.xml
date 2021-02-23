@@ -11,205 +11,210 @@
     android:orientation="horizontal"
     tools:context=".AccountFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_profile"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="8dp"
-        android:background="@color/black"
-        card_view:cardUseCompatPadding="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="16dp">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-            <ImageView
-                android:id="@+id/imagView_profile"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:srcCompat="@drawable/avatar" />
-
-            <Button
-                android:id="@+id/btn_profileAvatar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Edit" />
-
-            <Button
-                android:id="@+id/btn_profileAvatarSave"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:visibility="gone"
-                tools:visibility="gone" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <Button
-                android:id="@+id/button6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="MY RUNNING TRACKS" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:layout_marginTop="32dp"
-        android:background="@color/black"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="8dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView_profile"
-        card_view:layout_constraintStart_toStartOf="parent">
-
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_height="match_parent"
+            android:stretchColumns="1">
 
-            <EditText
-                android:id="@+id/email_edittext"
+            <!-- everything you already have -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:enabled="false"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:textColor="#000000"
-                android:textColorHint="@color/place_autocomplete_search_hint" />
+                android:layout_gravity="top"
+                android:background="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                card_view:cardCornerRadius="10dp"
+                card_view:cardElevation="8dp"
+                card_view:cardUseCompatPadding="true">
 
+                <TextView
+                    android:id="@+id/textview_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:clickable="true"
+                    android:paddingBottom="32dp"
+                    android:text="Log out" />
 
-            <EditText
-                android:id="@+id/firstname_edittext"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/imagView_profile"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:srcCompat="@drawable/avatar" />
+
+                    <Button
+                        android:id="@+id/btn_profileAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Edit" />
+
+                    <Button
+                        android:id="@+id/btn_profileAvatarSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Save"
+                        android:visibility="gone"
+                        tools:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:orientation="vertical"
+                    android:padding="8dp"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:enabled="false"
-                android:hint="First name"
-                android:inputType="text"
-                android:textColor="#000000"
-                android:textColorHint="@color/place_autocomplete_search_hint" />
-
-            <EditText
-                android:id="@+id/lastname_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:enabled="false"
-                android:hint="Last name"
-                android:inputType="text"
-                android:textColor="#000000" />
-
-            <EditText
-                android:id="@+id/age_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:enabled="false"
-                android:hint="Age"
-                android:inputType="number"
-                android:textColor="#000000" />
-
-            <EditText
-                android:id="@+id/password_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:enabled="false"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/password_edittext2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
+                android:layout_gravity="center_horizontal"
+                android:background="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_profile"
+                card_view:cardCornerRadius="10dp"
+                card_view:cardElevation="8dp"
+                card_view:cardUseCompatPadding="true"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent">
 
 
-                <Button
-                    android:id="@+id/btn_edit_update"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:background="#FFFFFF"
-                    android:text="EDIT"
-                    android:textColor="@color/white"
-                    card_view:backgroundTint="@color/purple_500" />
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/textview_logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:clickable="true"
-                android:text="Log out" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <TextView
-                android:id="@+id/textView_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Please Sign In"
-                android:textColor="#673AB7" />
-
-            <Button
-                android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Sign in" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+                    <EditText
+                        android:id="@+id/email_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:enabled="false"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:textColor="#000000"
+                        android:textColorHint="@color/place_autocomplete_search_hint" />
 
 
+                    <EditText
+                        android:id="@+id/firstname_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:enabled="false"
+                        android:hint="First name"
+                        android:inputType="text"
+                        android:textColor="#000000"
+                        android:textColorHint="@color/place_autocomplete_search_hint" />
+
+                    <EditText
+                        android:id="@+id/lastname_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:enabled="false"
+                        android:hint="Last name"
+                        android:inputType="text"
+                        android:textColor="#000000" />
+
+                    <EditText
+                        android:id="@+id/age_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:enabled="false"
+                        android:hint="Age"
+                        android:inputType="number"
+                        android:textColor="#000000" />
+
+                    <EditText
+                        android:id="@+id/password_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:enabled="false"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/password_edittext2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal">
+
+
+                        <Button
+                            android:id="@+id/btn_edit_update"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:background="#FFFFFF"
+                            android:text="EDIT"
+                            android:textColor="@color/white"
+                            card_view:backgroundTint="@color/purple_500" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/textView_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Please Sign In"
+                        android:textColor="#673AB7" />
+
+                    <Button
+                        android:id="@+id/btn_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Sign in" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </TableLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

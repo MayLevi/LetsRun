@@ -1,43 +1,27 @@
 package com.example.letsrun;
-
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.example.letsrun.model.Model;
+import com.example.letsrun.model.FirestoreAdapter;
 import com.example.letsrun.model.Post;
 import com.example.letsrun.model.User;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import java.util.LinkedList;
+
+//TODO delete this imports
+import com.firebase.ui.firestore.SnapshotParser;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.squareup.picasso.Picasso;
 
-import java.util.LinkedList;
-import java.util.List;
-
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WallFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class WallFragment extends Fragment {
+public class WallFragment extends Fragment implements FirestoreAdapter.OnListItemClick {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,7 +37,7 @@ public class WallFragment extends Fragment {
 
     private FirebaseFirestore db;
     private RecyclerView list;
-    FirestoreRecyclerAdapter adapter;
+    FirestoreAdapter adapter;
 
 
     public WallFragment() {
@@ -101,34 +85,28 @@ public class WallFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         list = view.findViewById(R.id.wall_recycler_view);
 
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(3)
+                .build();
+
         //Query
         Query query = db.collection("posts");
 
-        FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
-                .setQuery(query,Post.class)
+        FirestorePagingOptions<Post> options = new FirestorePagingOptions.Builder<Post>()
+                .setQuery(query, config, new SnapshotParser<Post>() {
+                    @NonNull
+                    @Override
+                    public Post parseSnapshot(@NonNull DocumentSnapshot snapshot) {
+                        Post post = snapshot.toObject(Post.class);
+                        post.setPostId(snapshot.getId());
+                        return post;
+                    }
+                })
+                .setLifecycleOwner(this)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<Post, PostsViewHolder>(options) {
-            @NonNull
-            @Override
-            public PostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row,parent,false);
-                return new PostsViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull PostsViewHolder postsViewHolder, int i, @NonNull Post post) {
-                postsViewHolder.listrow_userTextView.setText(post.getFirstName() + " " + post.getLastName());
-                postsViewHolder.listrow_km.setText(post.getKilometers());
-                String url = post.getImg();
-
-                if(url!=null){
-                    Picasso.get().load(url).placeholder(R.drawable.avatar).into(postsViewHolder.listrow_ImageView);
-                }
-
-            }
-        };
-
+        adapter = new FirestoreAdapter(options,this);
 
 
         list.setHasFixedSize(true);
@@ -138,30 +116,8 @@ public class WallFragment extends Fragment {
 
     }
 
-
-    private class PostsViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView listrow_userTextView;
-        private TextView listrow_km;
-        private ImageView listrow_ImageView;
-
-        public PostsViewHolder(@NonNull View itemView) {
-            super(itemView);
-            listrow_userTextView = itemView.findViewById(R.id.listrow_userTextView);
-            listrow_km = itemView.findViewById(R.id.listrow_km);
-            listrow_ImageView = itemView.findViewById(R.id.listrow_ImageView);
-        }
-    }
-
     @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
+    public void onItemClick(DocumentSnapshot snapshot,int position) {
+        Log.d("TAG","Item click: " + position + " the ID: " + snapshot.getId());
     }
 }

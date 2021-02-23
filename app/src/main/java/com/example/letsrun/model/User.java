@@ -25,33 +25,39 @@ public class User {
     private String imageUrl;
     private Long lastUpdated;
 
-    public User() {
-
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+    //Constructors
+    public User() { }
+    public User(@NonNull String userId ,String firstName, String lastName,String email,String age) {
+        this.userId=userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
+        this.age = age;
     }
 
-    public String getAge() {
-        return age;
-    }
 
+    //Getters
     @NonNull
     public String getUserId() {
         return userId;
     }
-
-    public void setAge(String age) {
-        this.age = age;
+    public String getEmail() {
+        return email;
     }
-
-    public void setUserId(@NonNull String userId) {
-        this.userId = userId;
+    public String getAge() {
+        return age;
+    }
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public String getFirstName() {
+        return firstName;
     }
 
     public Map<String, Object> toMap() {
@@ -66,6 +72,28 @@ public class User {
         return result;
     }
 
+    //Setters
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setAge(String age) {
+        this.age = age;
+    }
+    public void setUserId(@NonNull String userId) {
+        this.userId = userId;
+    }
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    public void setFirstName(String userName) {
+        this.firstName = userName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
     public void fromMap(Map<String, Object> map){
         userId = (String)map.get("userId");
         email = (String)map.get("email");
@@ -77,41 +105,7 @@ public class User {
         lastUpdated = ts.getSeconds();
     }
 
-    public Long getLastUpdated() {
-        return lastUpdated;
-    }
 
-    public void setLastUpdated(Long lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 
-    public User(@NonNull String userId ,String firstName, String lastName,String email,String age) {
-    this.userId=userId;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.age = age;
-}
-    public String getImageUrl() {
-        return imageUrl;
-    }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String userName) {
-        this.firstName = userName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 }
