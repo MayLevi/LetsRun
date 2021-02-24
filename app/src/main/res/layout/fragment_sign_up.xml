@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#673AB7"
+    android:background="@drawable/run"
     tools:context=".SignUpFragment">
     <ScrollView
         android:layout_width="match_parent"
