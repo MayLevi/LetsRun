@@ -227,7 +227,17 @@ public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
 
     public static void likePost(Post post){
         FirebaseFirestore db;
-        post.setLikes(post.getLikes()+1);
+
+        Log.d("TAG","old likes " + post.getLikes());
+        String likes = post.getLikes();
+        if (likes == null)
+        {
+            likes = "0";
+        }
+        likes = Integer.toString(Integer.parseInt(likes) + 1);
+        post.setLikes(likes);
+
+        Log.d("TAG","new likes " + post.getLikes());
         db = FirebaseFirestore.getInstance();
         db.collection("posts").document(post.getPostId()).set(post);
 
@@ -274,7 +284,7 @@ public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
     public void onItemClick(DocumentSnapshot snapshot, int position) {
         Log.d("TAG","Item click: " + position + " the ID: " + snapshot.getId());
         Post p = snapshot.toObject(Post.class);
-
+        Log.d("TAG","likes" + p.getLikes());
         Log.d("TAG",p.getLastName());
     }
 
@@ -299,12 +309,14 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
         postsViewHolder.listrow_userTextView.setText(post.getFirstName() + " " + post.getLastName());
         postsViewHolder.listrow_km.setText(post.getKilometers());
         postsViewHolder.listrow_location.setText(post.getLocation());
-//        postsViewHolder.listrow_like.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Model.instance.likePost(post);
-//            }
-//        });
+        postsViewHolder.listrow_likecounter.setText(post.getLikes());
+        postsViewHolder.listrow_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Model.instance.likePost(post);
+                postsViewHolder.listrow_likecounter.setText(post.getLikes());
+            }
+        });
 
         String url = post.getImg();
 
@@ -345,7 +357,7 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
 
     public class PostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView listrow_userTextView,listrow_location,listrow_km;
+        private TextView listrow_userTextView,listrow_location,listrow_km, listrow_likecounter;
 
         private ImageView listrow_ImageView;
         private ImageButton listrow_like;
@@ -357,6 +369,7 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
             listrow_ImageView = itemView.findViewById(R.id.listrow_ImageView);
             listrow_like = itemView.findViewById(R.id.listrow_like);
             listrow_location = itemView.findViewById(R.id.listrow_location);
+            listrow_likecounter = itemView.findViewById(R.id.listrow_likecounter);
 
 
             itemView.setOnClickListener(this);
