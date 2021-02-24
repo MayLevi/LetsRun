@@ -2,7 +2,6 @@ package com.example.letsrun;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,15 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.media.MediaBrowserServiceCompat;
 import androidx.navigation.Navigation;
-
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,8 +19,7 @@ import android.widget.TextView;
 
 import com.example.letsrun.model.Model;
 import com.example.letsrun.model.User;
-import com.google.android.material.textfield.TextInputEditText;
-import com.squareup.picasso.Picasso;
+
 
 public class profile extends Fragment {
     View view;
