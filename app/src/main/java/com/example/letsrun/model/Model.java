@@ -36,7 +36,9 @@ public class Model {
     public void logOut() {
         ModelFirebase.logOut();
     }
-        public interface logInListener {
+
+
+    public interface logInListener {
         void onComplete();
     }
     public void logIn(String email, String password, View view){

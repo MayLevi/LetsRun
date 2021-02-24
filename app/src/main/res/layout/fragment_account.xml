@@ -41,7 +41,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:clickable="true"
-                    android:paddingBottom="32dp"
+                    android:padding="16dp"
+                    android:paddingRight="32dp"
                     android:text="Log out" />
 
                 <LinearLayout
@@ -78,6 +79,15 @@
                     android:layout_gravity="right"
                     android:orientation="vertical"
                     android:padding="8dp"/>
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="My Posts" />
 
             </androidx.cardview.widget.CardView>
 

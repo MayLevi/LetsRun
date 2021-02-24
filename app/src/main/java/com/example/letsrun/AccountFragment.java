@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.letsrun.model.Model;
 import com.example.letsrun.model.User;
+import com.squareup.picasso.Picasso;
+
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
@@ -90,28 +92,46 @@ public class AccountFragment extends Fragment {
                 BitmapDrawable drawable=(BitmapDrawable) imagView_profile.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
 
-                Model.instance.uploadImage(bitmap, "myid", new Model.uploadImageListener() {
+                Model.instance.getCurrentUserId(new Model.getCurrentUserIdListener() {
                     @Override
-                    public void onComplete(String url) {
-                        if(url==null){
+                    public void onComplete(String id) {
+                        Model.instance.uploadImage(bitmap, id, new Model.uploadImageListener() {
+                            @Override
+                            public void onComplete(String url) {
+                                if(url==null){ }else{
+                                    Model.instance.getUser(id, new Model.getUserListener() {
+                                        @Override
+                                        public void onComplete(User user) {
+                                            user.setImageUrl(url);
+                                            Model.instance.addUser(user, new Model.addUserListener() {
+                                                @Override
+                                                public void onComplete() {
 
-                        }else{
-//                            Model.instance.getCurrentUser(new Model.getUserListener() {
-//                                @Override
-//                                public void onComplete(User user) {
-//                                    user.setImageUrl(url);
-//                                    Model.instance.addUser(user, new Model.addUserListener() {
+                                                }
+                                            });
+
+                                        }
+                                    });
+//                                    Model.instance.getCurrentUser(new Model.getUserListener() {
 //                                        @Override
-//                                        public void onComplete() {
+//                                        public void onComplete(User user) {
+//                                            user.setImageUrl(url);
+//                                            Model.instance.addUser(user, new Model.addUserListener() {
+//                                                @Override
+//                                                public void onComplete() {
+//
+//                                                }
+//                                            });
 //                                        }
 //                                    });
-//                                }
-//                            });
 
 
-                        }
+                                }
+                            }
+                        });
                     }
                 });
+
                 ///////
             }
         });
@@ -123,10 +143,13 @@ public class AccountFragment extends Fragment {
                     Model.instance.getUser(id, new Model.getUserListener() {
                         @Override
                         public void onComplete(User user) {
-                            lastname_edittext.setText(user.getLastName());
                             email_edittext.setText(user.getEmail());
+                            lastname_edittext.setText(user.getLastName());
                             firstname_edittext.setText(user.getFirstName());
                             age_edittext.setText(user.getAge());
+
+
+                            Picasso.get().load(user.getImageUrl()).placeholder(R.drawable.avatar).into(imagView_profile);
                         }
                     });
                 }else{
