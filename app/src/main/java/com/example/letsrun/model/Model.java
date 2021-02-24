@@ -138,6 +138,10 @@ public class Model {
         ModelFirebase.likePost(post);
     }
 
+    public void deletePost(Post post){
+        ModelFirebase.deletePost(post);
+    }
+
     public void wallFragment(LifecycleOwner lifecycleOwner, View view){
         ModelFirebase mfb = new ModelFirebase();
         mfb.wallFragment(lifecycleOwner,view);

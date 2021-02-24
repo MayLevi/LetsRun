@@ -243,6 +243,12 @@ public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
 
     }
 
+    public static void deletePost(Post post){
+        FirebaseFirestore db;
+        db = FirebaseFirestore.getInstance();
+        db.collection("posts").document(post.getPostId()).delete();
+    }
+
 
     public void wallFragment(LifecycleOwner lifecycleOwner, View view){
         FirebaseFirestore db;
@@ -310,6 +316,13 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
         postsViewHolder.listrow_km.setText(post.getKilometers());
         postsViewHolder.listrow_location.setText(post.getLocation());
         postsViewHolder.listrow_likecounter.setText(post.getLikes());
+        postsViewHolder.listrow_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Model.instance.deletePost(post);
+                //postsViewHolder.listrow_likecounter.setText(post.getLikes());
+            }
+        });
         postsViewHolder.listrow_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -357,7 +370,8 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
 
     public class PostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView listrow_userTextView,listrow_location,listrow_km, listrow_likecounter;
+        private TextView listrow_userTextView,listrow_location,listrow_km, listrow_likecounter,
+                listrow_delete;
 
         private ImageView listrow_ImageView;
         private ImageButton listrow_like;
@@ -370,7 +384,7 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
             listrow_like = itemView.findViewById(R.id.listrow_like);
             listrow_location = itemView.findViewById(R.id.listrow_location);
             listrow_likecounter = itemView.findViewById(R.id.listrow_likecounter);
-
+            listrow_delete = itemView.findViewById(R.id.listrow_delete);
 
             itemView.setOnClickListener(this);
         }
