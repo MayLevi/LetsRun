@@ -58,6 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/listrow_comment"
@@ -70,5 +71,16 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/listrow_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Location"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/listrow_ImageView"
+        app:layout_constraintTop_toBottomOf="@+id/listrow_km" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

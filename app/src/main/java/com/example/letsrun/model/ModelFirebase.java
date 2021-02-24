@@ -1,10 +1,19 @@
 package com.example.letsrun.model;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.navigation.Navigation;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.letsrun.MyApplication;
 import com.example.letsrun.R;
+import com.example.letsrun.WallFragment;
+import com.firebase.ui.firestore.SnapshotParser;
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -29,6 +39,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +51,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class ModelFirebase {
+public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
 
 
     public static void signUp(String email, String password,String firstName,String lastName,String age,View view){
@@ -98,6 +109,8 @@ public class ModelFirebase {
         });
 
     }
+
+
     public void getCurrentUser(Model.getUserListener listener) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         getUser(firebaseAuth.getUid(),listener);
@@ -106,6 +119,8 @@ public class ModelFirebase {
     public void getCurrentUserId(Model.getCurrentUserIdListener listener) {
         listener.onComplete(FirebaseAuth.getInstance().getUid());
     }
+
+
 
     public interface getAllFriendsListener {
         void onComplete(List<User> list);
@@ -208,6 +223,156 @@ public class ModelFirebase {
     public static void logOut(){
         FirebaseAuth.getInstance().signOut();
 
+    }
+
+    public static void likePost(Post post){
+        FirebaseFirestore db;
+        post.setLikes(post.getLikes()+1);
+        db = FirebaseFirestore.getInstance();
+        db.collection("posts").document(post.getPostId()).set(post);
+
+    }
+
+
+    public void wallFragment(LifecycleOwner lifecycleOwner, View view){
+        FirebaseFirestore db;
+        RecyclerView list;
+        FirestoreAdapter adapter;
+        list = view.findViewById(R.id.wall_recycler_view);
+
+        db = FirebaseFirestore.getInstance();
+
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(3)
+                .build();
+
+        //Query
+        Query query = db.collection("posts");
+
+        FirestorePagingOptions<Post> options = new FirestorePagingOptions.Builder<Post>()
+                .setQuery(query, config, new SnapshotParser<Post>() {
+                    @NonNull
+                    @Override
+                    public Post parseSnapshot(@NonNull DocumentSnapshot snapshot) {
+                        Post post = snapshot.toObject(Post.class);
+                        post.setPostId(snapshot.getId());
+                        return post;
+                    }
+                })
+                .setLifecycleOwner(lifecycleOwner)
+                .build();
+
+        adapter = new FirestoreAdapter(options,this);
+
+
+        list.setHasFixedSize(true);
+        list.setLayoutManager(new LinearLayoutManager(MyApplication.context));
+        list.setAdapter(adapter);
+    }
+    @Override
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
+        Log.d("TAG","Item click: " + position + " the ID: " + snapshot.getId());
+        Post p = snapshot.toObject(Post.class);
+
+        Log.d("TAG",p.getLastName());
+    }
+
+
+
+
+
+}
+
+
+// FirestoreAdapter
+class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.PostsViewHolder> {
+
+    private OnListItemClick onListItemClick;
+    public FirestoreAdapter(@NonNull FirestorePagingOptions<Post> options,OnListItemClick onListItemClick) {
+        super(options);
+        this.onListItemClick = onListItemClick;
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull PostsViewHolder postsViewHolder, int i, @NonNull Post post) {
+        postsViewHolder.listrow_userTextView.setText(post.getFirstName() + " " + post.getLastName());
+        postsViewHolder.listrow_km.setText(post.getKilometers());
+        postsViewHolder.listrow_location.setText(post.getLocation());
+//        postsViewHolder.listrow_like.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Model.instance.likePost(post);
+//            }
+//        });
+
+        String url = post.getImg();
+
+        if(url!=null){
+            Picasso.get().load(url).placeholder(R.drawable.avatar).into(postsViewHolder.listrow_ImageView);
+        }
+    }
+
+    @NonNull
+    @Override
+    public PostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row,parent,false);
+        return new PostsViewHolder(view);
+    }
+
+    @Override
+    protected void onLoadingStateChanged(@NonNull LoadingState state) {
+        super.onLoadingStateChanged(state);
+        switch (state){
+            case LOADING_INITIAL:
+                Log.d("TAG","Loading initial data");
+                break;
+            case LOADING_MORE:
+                Log.d("TAG","Loading next page");
+                break;
+            case FINISHED:
+                Log.d("TAG","All data loaded");
+                break;
+            case ERROR:
+                Log.d("TAG","Error loading data");
+                break;
+            case LOADED:
+                Log.d("TAG","Total item loaded: "+ getItemCount());
+                break;
+
+        }
+    }
+
+    public class PostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private TextView listrow_userTextView,listrow_location,listrow_km;
+
+        private ImageView listrow_ImageView;
+        private ImageButton listrow_like;
+
+        public PostsViewHolder(@NonNull View itemView) {
+            super(itemView);
+            listrow_userTextView = itemView.findViewById(R.id.listrow_userTextView);
+            listrow_km = itemView.findViewById(R.id.listrow_km);
+            listrow_ImageView = itemView.findViewById(R.id.listrow_ImageView);
+            listrow_like = itemView.findViewById(R.id.listrow_like);
+            listrow_location = itemView.findViewById(R.id.listrow_location);
+
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            onListItemClick.onItemClick(getItem(getAdapterPosition()),getAdapterPosition());
+        }
+
+    }
+
+
+    public interface OnListItemClick {
+        void onItemClick(DocumentSnapshot snapshot,int position);
     }
 
 }

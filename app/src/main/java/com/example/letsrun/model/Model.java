@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
@@ -131,4 +132,12 @@ public class Model {
       modelFirebase.uploadImage(imageBmp,name,listener);
     }
 
+    public void likePost(Post post){
+        ModelFirebase.likePost(post);
+    }
+
+    public void wallFragment(LifecycleOwner lifecycleOwner, View view){
+        ModelFirebase mfb = new ModelFirebase();
+        mfb.wallFragment(lifecycleOwner,view);
+    }
 }
