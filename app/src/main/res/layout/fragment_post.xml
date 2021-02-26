@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:background="#673AB7"
-    tools:context=".PostFragment">
+    tools:context=".fragments.PostFragment">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"

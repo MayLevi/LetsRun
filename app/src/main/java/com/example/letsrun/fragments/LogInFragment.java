@@ -1,4 +1,4 @@
-package com.example.letsrun;
+package com.example.letsrun.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.letsrun.R;
 import com.example.letsrun.model.Model;
 import com.example.letsrun.model.User;
 

@@ -9,7 +9,7 @@
     android:background="@drawable/run"
     android:gravity="center"
     android:orientation="horizontal"
-    tools:context=".AccountFragment">
+    tools:context=".fragments.AccountFragment">
 
     <ScrollView
         android:layout_width="match_parent"

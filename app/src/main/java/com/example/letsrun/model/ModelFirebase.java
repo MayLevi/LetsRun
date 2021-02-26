@@ -1,6 +1,5 @@
 package com.example.letsrun.model;
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
@@ -9,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.letsrun.MyApplication;
 import com.example.letsrun.R;
-import com.example.letsrun.WallFragment;
 import com.firebase.ui.firestore.SnapshotParser;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
@@ -47,9 +45,6 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
 
 public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
 

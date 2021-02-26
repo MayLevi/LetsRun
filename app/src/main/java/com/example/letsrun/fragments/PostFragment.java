@@ -1,4 +1,4 @@
-package com.example.letsrun;
+package com.example.letsrun.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.letsrun.R;
 import com.example.letsrun.model.Model;
 import com.example.letsrun.model.User;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;

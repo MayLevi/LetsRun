@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="#673AB7"
-    tools:context=".LogInFragment">
+    tools:context=".fragments.LogInFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout"
