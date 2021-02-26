@@ -13,12 +13,11 @@ import android.widget.EditText;
 
 import com.example.letsrun.R;
 import com.example.letsrun.model.Model;
-import com.example.letsrun.model.User;
 
 public class LogInFragment extends Fragment {
+
     private EditText email_edittext,password_edittext;
     private Button btn_signUp,btn_signIn;
-    private User user;
     private ProgressDialog progressDialog;
 
     @Override

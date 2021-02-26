@@ -22,10 +22,31 @@ public class Model {
 
     private Model(){}
 
+    MutableLiveData<User> userLiveData = new MutableLiveData<User>();
+
+    public MutableLiveData<User> getCurrentUser(){
+        modelFirebase.getCurrentUser(new getUserListener() {
+            @Override
+            public void onComplete(User user) {
+                userLiveData.setValue(user);
+            }
+        });
+        return userLiveData;
+    }
+
+    LiveData<List<User>> friendsList;
+
+    public LiveData<List<User>> getAllFriends() {
+        if (friendsList == null){
+            friendsList = modelSql.getAllFriends();
+            refreshAllFriends(null);
+        }
+        return friendsList;
+    }
+
     public void logOut() {
         ModelFirebase.logOut();
     }
-
 
     public interface logInListener {
         void onComplete();
@@ -47,15 +68,7 @@ public class Model {
         void onComplete();
     }
 
-    LiveData<List<User>> friendsList;
 
-    public LiveData<List<User>> getAllFriends() {
-        if (friendsList == null){
-            friendsList = modelSql.getAllFriends();
-            refreshAllFriends(null);
-        }
-        return friendsList;
-    }
 
     private void refreshAllFriends(final getAllFriendsListener listener) {
         final SharedPreferences sp = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
@@ -88,9 +101,15 @@ public class Model {
     public interface getUserListener {
         void onComplete(User user);
     }
-
-    public void getUser(final String id, getUserListener listener){
-        modelFirebase.getUser(id,listener);
+    MutableLiveData<User> getUser = new MutableLiveData<User>();
+    public MutableLiveData<User> getUser(final String id){
+        modelFirebase.getUser(id, new getUserListener() {
+            @Override
+            public void onComplete(User user) {
+                getUser.setValue(user);
+            }
+        });
+        return getUser;
     }
 
     public interface getCurrentUserIdListener{
@@ -100,16 +119,18 @@ public class Model {
         modelFirebase.getCurrentUserId(listener);
     }
 
-    MutableLiveData<User> userLiveData = new MutableLiveData<User>();
-    public MutableLiveData<User> getCurrentUser(){
-        modelFirebase.getCurrentUser(new getUserListener() {
+    MutableLiveData<String> userIdLiveData = new MutableLiveData<String>();
+    public MutableLiveData<String> getCurrentUserId(){
+        modelFirebase.getCurrentUserId(new getCurrentUserIdListener() {
             @Override
-            public void onComplete(User user) {
-                userLiveData.setValue(user);
+            public void onComplete(String id) {
+                userIdLiveData.setValue(id);
             }
         });
-        return userLiveData;
+        return userIdLiveData;
     }
+
+
     public interface addUserListener {
         void onComplete();
     }
@@ -117,7 +138,7 @@ public class Model {
         modelFirebase.addUser(user,listener);
     }
     public interface uploadImageListener{
-        public void onComplete(String url);
+        void onComplete(String url);
     }
     public void uploadImage(Bitmap imageBmp, String name, final uploadImageListener listener) {
       modelFirebase.uploadImage(imageBmp,name,listener);

@@ -19,7 +19,6 @@ import com.example.letsrun.model.Model;
 
 public class SignUpFragment extends Fragment {
 
-    SignUpViewModel viewModel;
 
     private EditText email_edittext,password_edittext,password_edittext2,firstName,lastName,age;
     private Button btn_signUp;
@@ -32,8 +31,6 @@ public class SignUpFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        viewModel  = new ViewModelProvider(this).get(SignUpViewModel.class);
-
         email_edittext = view.findViewById(R.id.email_edittext);
         password_edittext = view.findViewById(R.id.password_edittext);
         password_edittext2 = view.findViewById(R.id.password_edittext2);
@@ -44,12 +41,9 @@ public class SignUpFragment extends Fragment {
 
 
         progressDialog = new ProgressDialog(this.getContext());
-        btn_signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Register();
-            }
-        });
+
+        btn_signUp.setOnClickListener(view1 ->
+                Register());
 
         return view;
     }

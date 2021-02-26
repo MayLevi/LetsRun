@@ -11,6 +11,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -34,7 +36,9 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class AccountFragment extends Fragment {
-
+    AccountViewModel viewModel;
+    User currentUser;
+    int flag;
     ImageView imagView_profile;
     EditText email_edittext,firstname_edittext,lastname_edittext,age_edittext,password_edittext,password_edittext2;
     TextView textView_login,textview_logout;
@@ -47,6 +51,7 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_account, container, false);
+
 
         email_edittext = view.findViewById(R.id.email_edittext);
         firstname_edittext =view.findViewById(R.id.firstname_edittext);
@@ -66,14 +71,40 @@ public class AccountFragment extends Fragment {
         imagView_profile = view.findViewById(R.id.imagView_profile);
         btn_profileAvatarSave = view.findViewById(R.id.btn_profileAvatarSave);
 
-//        MutableLiveData<User> userLiveData = Model.instance.getCurrentUser();
-//        userLiveData.observe(getViewLifecycleOwner(), new Observer<User>() {
-//            @Override
-//            public void onChanged(User user) {
-//
-//            }
-//        });
 
+        Model.instance.getCurrentUserId(new Model.getCurrentUserIdListener() {
+            @Override
+            public void onComplete(String id) {
+                if(id==null){
+                    linearLayout.setVisibility(View.GONE);
+                    linearLayout2.setVisibility(View.VISIBLE);
+                    cardView_profile.setVisibility(View.INVISIBLE);
+                    flag = 0;
+                }else{
+                    flag=1;
+                }
+            }
+        });
+
+        if(flag==1){
+            viewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+            viewModel.getUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+
+                    currentUser = user;
+
+                    email_edittext.setText(currentUser.getEmail());
+                    lastname_edittext.setText(currentUser.getLastName());
+                    firstname_edittext.setText(currentUser.getFirstName());
+                    age_edittext.setText(currentUser.getAge());
+                    Picasso.get().load(currentUser.getImageUrl()).placeholder(R.drawable.avatar).into(imagView_profile);
+
+                }
+            });
+
+
+        }
 
         btn_profileAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,77 +121,24 @@ public class AccountFragment extends Fragment {
             public void onClick(View view) {
                 btn_profileAvatarSave.setVisibility(view.GONE);
                 btn_profileAvatar.setVisibility(view.VISIBLE);
-                ///////
                 BitmapDrawable drawable=(BitmapDrawable) imagView_profile.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
-
-                Model.instance.getCurrentUserId(new Model.getCurrentUserIdListener() {
+                Model.instance.uploadImage(bitmap, currentUser.getUserId(), new Model.uploadImageListener() {
                     @Override
-                    public void onComplete(String id) {
-                        Model.instance.uploadImage(bitmap, id, new Model.uploadImageListener() {
+                    public void onComplete(String url) {
+                        currentUser.setImageUrl(url);
+                        Model.instance.addUser(currentUser, new Model.addUserListener() {
                             @Override
-                            public void onComplete(String url) {
-                                if(url==null){ }else{
-                                    Model.instance.getUser(id, new Model.getUserListener() {
-                                        @Override
-                                        public void onComplete(User user) {
-                                            user.setImageUrl(url);
-                                            Model.instance.addUser(user, new Model.addUserListener() {
-                                                @Override
-                                                public void onComplete() {
+                            public void onComplete() {
 
-                                                }
-                                            });
-
-                                        }
-                                    });
-//                                    Model.instance.getCurrentUser(new Model.getUserListener() {
-//                                        @Override
-//                                        public void onComplete(User user) {
-//                                            user.setImageUrl(url);
-//                                            Model.instance.addUser(user, new Model.addUserListener() {
-//                                                @Override
-//                                                public void onComplete() {
-//
-//                                                }
-//                                            });
-//                                        }
-//                                    });
-
-
-                                }
                             }
                         });
                     }
                 });
 
-                ///////
             }
         });
 
-        Model.instance.getCurrentUserId(new Model.getCurrentUserIdListener() {
-            @Override
-            public void onComplete(String id) {
-                if(id!=null){
-                    Model.instance.getUser(id, new Model.getUserListener() {
-                        @Override
-                        public void onComplete(User user) {
-                            email_edittext.setText(user.getEmail());
-                            lastname_edittext.setText(user.getLastName());
-                            firstname_edittext.setText(user.getFirstName());
-                            age_edittext.setText(user.getAge());
-
-
-                            Picasso.get().load(user.getImageUrl()).placeholder(R.drawable.avatar).into(imagView_profile);
-                        }
-                    });
-                }else{
-                    linearLayout.setVisibility(View.GONE);
-                    linearLayout2.setVisibility(View.VISIBLE);
-                    cardView_profile.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,14 +164,13 @@ public class AccountFragment extends Fragment {
                         @Override
                         public void onComplete(String id) {
 
-                                    User u = new User(id,firstname_edittext.getText().toString(),lastname_edittext.getText().toString(),email_edittext.getText().toString(),age_edittext.getText().toString());
+                            User u = new User(id,firstname_edittext.getText().toString(),lastname_edittext.getText().toString(),email_edittext.getText().toString(),age_edittext.getText().toString());
 
-                                    Model.instance.addUser(u, new Model.addUserListener() {
-                                        @Override
-                                        public void onComplete() {
-                                            Log.d("TAG1","BINGO!");
-                                        }
-                                    });
+                            Model.instance.addUser(u, new Model.addUserListener() {
+                                @Override
+                                public void onComplete() {
+                                }
+                            });
                         }
                     });
 
