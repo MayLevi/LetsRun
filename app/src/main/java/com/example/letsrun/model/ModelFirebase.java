@@ -239,6 +239,10 @@ public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
     }
 
     public static void deletePost(Post post){
+        if (!(FirebaseAuth.getInstance().getUid().equals(post.getUserId()))) {
+            Log.d("TAG", "Delete post DENIED! User uid: " + FirebaseAuth.getInstance().getUid() + " Post uid: " + post.getUserId());
+            return;
+        }
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         db.collection("posts").document(post.getPostId()).delete();
@@ -311,11 +315,14 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
         postsViewHolder.listrow_km.setText(post.getKilometers());
         postsViewHolder.listrow_location.setText(post.getLocation());
         postsViewHolder.listrow_likecounter.setText(post.getLikes());
+        if (!(FirebaseAuth.getInstance().getUid().equals(post.getUserId()))) {
+            postsViewHolder.listrow_delete.setVisibility(View.INVISIBLE);
+        }
         postsViewHolder.listrow_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Model.instance.deletePost(post);
-                //postsViewHolder.listrow_likecounter.setText(post.getLikes());
+                Navigation.findNavController(view).navigate(R.id.menu_wall);
             }
         });
         postsViewHolder.listrow_like.setOnClickListener(new View.OnClickListener() {
