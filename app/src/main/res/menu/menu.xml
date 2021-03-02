@@ -24,9 +24,4 @@
         android:visible="false"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/menu_track"
-        android:title="NewTrack"
-        android:visible="false"
-        app:showAsAction="never" />
 </menu>

@@ -22,6 +22,20 @@ public class Model {
 
     private Model(){}
 
+    MutableLiveData<Post> postLiveData = new MutableLiveData<Post>();
+    public interface getPostListener {
+        void onComplete(Post post);
+    }
+    public MutableLiveData<Post> getPost(String id){
+        modelFirebase.getPost(id,new getPostListener() {
+            @Override
+            public void onComplete(Post post) {
+                postLiveData.setValue(post);
+            }
+        });
+        return postLiveData;
+    }
+
     MutableLiveData<User> userLiveData = new MutableLiveData<User>();
 
     public MutableLiveData<User> getCurrentUser(){
@@ -60,8 +74,8 @@ public class Model {
         ModelFirebase.signUp(email, password,firstName,lastName,age,view);
 
     }
-    public void postByUser(User user, String kilometers,String text,String location){
-        ModelFirebase.postByUser(user,kilometers,text,location);
+    public void postByUser(User user, String kilometers,String text,String email,String lat,String lon){
+        ModelFirebase.postByUser(user,kilometers,text,email,lat,lon);
     }
 
     public interface getAllFriendsListener {
@@ -156,4 +170,6 @@ public class Model {
         ModelFirebase mfb = new ModelFirebase();
         mfb.wallFragment(lifecycleOwner,view);
     }
+
+
 }

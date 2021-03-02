@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listrow_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -49,19 +50,21 @@
         android:layout_marginBottom="8dp"
         android:text="Comment"
         android:textColor="#000000"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/listrow_like"
-        app:layout_constraintStart_toEndOf="@+id/listrow_ImageView" />
+        app:layout_constraintStart_toEndOf="@+id/listrow_ImageView"
+        tools:visibility="gone" />
 
     <ImageButton
         android:id="@+id/listrow_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/listrow_comment"
         app:srcCompat="@drawable/ic_baseline_thumb_up_24"
         tools:ignore="VectorDrawableCompat" />
 
@@ -73,12 +76,12 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
-        android:id="@+id/listrow_location"
+        android:id="@+id/listrow_Info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Location"
+        android:text="Info"
         android:textColor="#000000"
         app:layout_constraintStart_toEndOf="@+id/listrow_ImageView"
         app:layout_constraintTop_toBottomOf="@+id/listrow_km" />
@@ -87,20 +90,21 @@
         android:id="@+id/listrow_likecounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
         android:layout_marginBottom="8dp"
         android:text="0"
         android:textColor="#1AE614"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.68"
-        app:layout_constraintStart_toEndOf="@+id/listrow_comment" />
+        app:layout_constraintEnd_toStartOf="@+id/listrow_like" />
 
     <TextView
         android:id="@+id/listrow_delete"
-        android:layout_width="35dp"
-        android:layout_height="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
         android:text="delete"
         android:textSize="10sp"
+        app:drawableTopCompat="@drawable/ic_baseline_delete_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -1,12 +1,15 @@
 package com.example.letsrun.model;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.letsrun.fragments.MapsFragmentDirections;
 import com.example.letsrun.MyApplication;
+import com.example.letsrun.NavGraphDirections;
 import com.example.letsrun.R;
 import com.firebase.ui.firestore.SnapshotParser;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
@@ -115,6 +118,20 @@ public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
         listener.onComplete(FirebaseAuth.getInstance().getUid());
     }
 
+    public void getPost(String id,Model.getPostListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Post post = new Post();
+
+        DocumentReference docRef = db.collection("posts").document(id);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Post post = documentSnapshot.toObject(Post.class);
+                listener.onComplete(post);
+
+            }
+        });
+    }
 
 
     public interface getAllFriendsListener {
@@ -205,13 +222,13 @@ public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
         });
     }
 
-    public static void postByUser(User user, String kilometers, String text, String location){
+    public static void postByUser(User user, String kilometers, String text,String email,String lat, String lon){
         FirebaseFirestore db;
 
         db = FirebaseFirestore.getInstance();
         Post post = new Post(user.getUserId(), user.getFirstName(),
                 user.getLastName(),user.getAge(),kilometers + "km"
-                ,text,location,user.getImageUrl());
+                ,text,user.getImageUrl(),email,lat,lon);
         db.collection("posts").add(post);
     }
 
@@ -313,7 +330,7 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
     protected void onBindViewHolder(@NonNull PostsViewHolder postsViewHolder, int i, @NonNull Post post) {
         postsViewHolder.listrow_userTextView.setText(post.getFirstName() + " " + post.getLastName());
         postsViewHolder.listrow_km.setText(post.getKilometers());
-        postsViewHolder.listrow_location.setText(post.getLocation());
+        postsViewHolder.listrow_Info.setText(post.getText());
         postsViewHolder.listrow_likecounter.setText(post.getLikes());
         if (!(FirebaseAuth.getInstance().getUid().equals(post.getUserId()))) {
             postsViewHolder.listrow_delete.setVisibility(View.INVISIBLE);
@@ -333,11 +350,25 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
             }
         });
 
+
         String url = post.getImg();
 
         if(url!=null){
             Picasso.get().load(url).placeholder(R.drawable.avatar).into(postsViewHolder.listrow_ImageView);
         }
+
+        postsViewHolder.listrow_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("TAG","my id is: " + post.getPostId());
+                NavGraphDirections.ActionGlobalMapsFragment action = MapsFragmentDirections.actionGlobalMapsFragment(post.getPostId());
+                Navigation.findNavController(view).navigate(action);
+
+
+            }
+        });
+
+
     }
 
     @NonNull
@@ -372,9 +403,10 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
 
     public class PostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView listrow_userTextView,listrow_location,listrow_km, listrow_likecounter,
+        private TextView listrow_userTextView,listrow_Info,listrow_km, listrow_likecounter,
                 listrow_delete;
 
+        private ConstraintLayout listrow_layout;
         private ImageView listrow_ImageView;
         private ImageButton listrow_like;
 
@@ -384,9 +416,10 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
             listrow_km = itemView.findViewById(R.id.listrow_km);
             listrow_ImageView = itemView.findViewById(R.id.listrow_ImageView);
             listrow_like = itemView.findViewById(R.id.listrow_like);
-            listrow_location = itemView.findViewById(R.id.listrow_location);
+            listrow_Info = itemView.findViewById(R.id.listrow_Info);
             listrow_likecounter = itemView.findViewById(R.id.listrow_likecounter);
             listrow_delete = itemView.findViewById(R.id.listrow_delete);
+            listrow_layout = itemView.findViewById(R.id.listrow_layout);
 
             itemView.setOnClickListener(this);
         }

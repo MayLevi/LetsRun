@@ -2,14 +2,16 @@ package com.example.letsrun.model;
 
 import android.widget.ImageView;
 
+import com.google.type.LatLng;
+
 public class Post {
 
-    private String postId,userId,firstName,lastName,age,kilometers,text,location,img,likes;
+    private String postId,userId,firstName,lastName,age,kilometers,text,location,img,likes,lat,lon,email;
 
     //Constructors
     public Post() {}
     //TODO add postId to constructor
-    public Post(String userId, String firstName, String lastName, String age, String kilometers, String text, String location, String img) {
+    public Post(String userId, String firstName, String lastName, String age, String kilometers, String text, String img) {
         this.postId = postId;
         this.likes = likes;
         this.userId = userId;
@@ -21,7 +23,31 @@ public class Post {
         this.location = location;
         this.img = img;
     }
+    public Post(String userId, String firstName, String lastName, String age, String kilometers,
+                String text, String img,String email,String lat,String lon) {
+        this.postId = postId;
+        this.likes = likes;
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.kilometers = kilometers;
+        this.text = text;
+        this.location = location;
+        this.img = img;
+        this.lat = lat;
+        this.lon = lon;
+        this.email = email;
+    }
 
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     //Setters
     public void setUserId(String userId) {
@@ -52,7 +78,8 @@ public class Post {
         this.postId = postId;
     }
     public void setLikes(String likes) { this.likes = likes; }
-
+    public void setLat(String lat) { this.lat = lat;}
+    public void setLon(String lon) { this.lon = lon; }
 
     //Getters
     public String getUserId() {
@@ -83,4 +110,6 @@ public class Post {
     public String getPostId() {
         return postId;
     }
+    public String getLat() {return lat; }
+    public String getLon() { return lon; }
 }

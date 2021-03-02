@@ -90,9 +90,15 @@
         android:label="Account"
         tools:layout="@layout/fragment_account" />
     <action android:id="@+id/action_global_menu_account" app:destination="@id/menu_account" />
+
     <fragment
-        android:id="@+id/menu_viewPost"
-        android:name="com.example.letsrun.ViewPostFragment"
-        android:label="fragment_view_post"
-        tools:layout="@layout/fragment_view_post" /><action android:id="@+id/action_global_menu_viewPost" app:destination="@id/menu_viewPost"/>
+        android:id="@+id/mapsFragment"
+        android:name="com.example.letsrun.fragments.MapsFragment"
+        android:label="Post"
+        tools:layout="@layout/fragment_maps">
+        <argument
+            android:name="post_id"
+            app:argType="string" />
+    </fragment>
+    <action android:id="@+id/action_global_mapsFragment" app:destination="@id/mapsFragment" />
 </navigation>

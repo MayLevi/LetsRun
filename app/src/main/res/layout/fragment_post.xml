@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:background="#673AB7"
     tools:context=".fragments.PostFragment">
 
@@ -21,9 +21,11 @@
         android:id="@+id/textview_results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView" />
+        app:layout_constraintTop_toBottomOf="@+id/mapView"
+        tools:visibility="invisible" />
 
     <androidx.cardview.widget.CardView
 
@@ -78,22 +80,13 @@
                 android:hint="Date"
                 android:inputType="date" />
 
-            <EditText
-                android:id="@+id/edittext_cotact"
+
+            <CheckBox
+                android:id="@+id/btn_share_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Contact info"
-                android:inputType="textPersonName" />
-
-
-            <EditText
-                android:id="@+id/edittext_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Location"
-                android:inputType="textPersonName" />
+                android:checked="true"
+                android:text="Share my email" />
 
             <Button
                 android:id="@+id/btn_location"
@@ -104,7 +97,7 @@
 
             <Button
                 android:id="@+id/btn_post"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="POST" />
@@ -116,12 +109,12 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="match_parent"

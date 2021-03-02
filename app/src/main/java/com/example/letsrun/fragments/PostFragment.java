@@ -10,11 +10,13 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,12 +35,14 @@ import static android.app.Activity.RESULT_OK;
 public class PostFragment extends Fragment {
 
     PostViewModel viewModel;
+    String lat,lon;
     Button btn_location,btn_post;
     TextView textview_results;
     MapView mapView;
     ImageView listrow_ImageView;
     int PLACE_PICKER_REQUEST = 1;
     User currentUser;
+    CheckBox btn_share_email;
     EditText edittext_info,edittext_kilometers,edittext_Date,edittext_location,edittext_cotact;
 
 
@@ -54,8 +58,9 @@ public class PostFragment extends Fragment {
         mapView = view.findViewById(R.id.mapView);
         btn_location =view.findViewById(R.id.btn_location);
         btn_post = view.findViewById(R.id.btn_post);
-        edittext_location = view.findViewById(R.id.edittext_location);
-        edittext_cotact = view.findViewById(R.id.edittext_cotact);
+        btn_share_email = view.findViewById(R.id.btn_share_email);
+//        edittext_location = view.findViewById(R.id.edittext_location);
+//        edittext_cotact = view.findViewById(R.id.edittext_cotact);
         edittext_Date = view.findViewById(R.id.edittext_Date);
         edittext_info = view.findViewById(R.id.edittext_info);
         edittext_kilometers = view.findViewById(R.id.edittext_kilometers);
@@ -82,13 +87,41 @@ public class PostFragment extends Fragment {
         });
 
 
-
         btn_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String date = edittext_Date.getText().toString();
+                String info = edittext_info.getText().toString();
+                String km = edittext_kilometers.getText().toString();
+
+                if(TextUtils.isEmpty(info)){
+                    edittext_info.setError("Please enter info");
+                    return;
+                }
+                if(TextUtils.isEmpty(km)){
+                    edittext_kilometers.setError("Please enter km");
+                    return;
+                }
+                if(TextUtils.isEmpty(date)){
+                    edittext_Date.setError("Please enter date");
+                    return;
+                }
+                if(lat==null)
+                {
+                    btn_location.setError("Please set location");
+                    return;
+                }
+
+
+
+
+                String email = " ";
+                if(btn_share_email.isChecked()){
+                    email = currentUser.getEmail();
+                }
+
                 Model.instance.postByUser(currentUser,edittext_kilometers.getText().toString()
-                        ,edittext_info.getText().toString(),
-                        edittext_location.getText().toString());
+                        ,edittext_info.getText().toString(),email,lat,lon);
                 Navigation.findNavController(getView()).navigate(R.id.action_global_menu_wall);
             }
         });
@@ -107,6 +140,8 @@ public class PostFragment extends Fragment {
                 StringBuilder stringBuilder = new StringBuilder();
                 String latitude = String.valueOf(place.getLatLng().latitude);
                 String longitude = String.valueOf(place.getLatLng().longitude);
+                lat = latitude;
+                lon = longitude;
                 stringBuilder.append("LATITUDE :");
                 stringBuilder.append(latitude);
                 stringBuilder.append("\n");
