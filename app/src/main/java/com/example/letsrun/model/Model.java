@@ -138,6 +138,7 @@ public class Model {
         modelFirebase.getCurrentUserId(new getCurrentUserIdListener() {
             @Override
             public void onComplete(String id) {
+
                 userIdLiveData.setValue(id);
             }
         });
@@ -151,9 +152,11 @@ public class Model {
     public void addUser(User user, addUserListener listener){
         modelFirebase.addUser(user,listener);
     }
+
+
+    ///
     public interface uploadImageListener{
-        void onComplete(String url);
-    }
+        void onComplete(String url);}
     public void uploadImage(Bitmap imageBmp, String name, final uploadImageListener listener) {
       modelFirebase.uploadImage(imageBmp,name,listener);
     }

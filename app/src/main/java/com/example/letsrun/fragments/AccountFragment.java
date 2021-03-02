@@ -52,6 +52,7 @@ public class AccountFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_account, container, false);
 
+        viewModel = new ViewModelProvider(this).get(AccountViewModel.class);
 
         email_edittext = view.findViewById(R.id.email_edittext);
         firstname_edittext =view.findViewById(R.id.firstname_edittext);
@@ -72,39 +73,29 @@ public class AccountFragment extends Fragment {
         btn_profileAvatarSave = view.findViewById(R.id.btn_profileAvatarSave);
 
 
-        Model.instance.getCurrentUserId(new Model.getCurrentUserIdListener() {
+        viewModel.getUser_id().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onComplete(String id) {
+            public void onChanged(String id) {
                 if(id==null){
-                    linearLayout.setVisibility(View.GONE);
-                    linearLayout2.setVisibility(View.VISIBLE);
-                    cardView_profile.setVisibility(View.INVISIBLE);
-                    flag = 0;
+                    requireLogIn();
                 }else{
-                    flag=1;
-                }
+                    viewModel.getUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+                        @Override
+                        public void onChanged(User user) {
+
+                            currentUser = user;
+
+                            email_edittext.setText(currentUser.getEmail());
+                            lastname_edittext.setText(currentUser.getLastName());
+                            firstname_edittext.setText(currentUser.getFirstName());
+                            age_edittext.setText(currentUser.getAge());
+                            Picasso.get().load(currentUser.getImageUrl()).placeholder(R.drawable.avatar).into(imagView_profile);
+
+                        }
+                    });                }
             }
         });
 
-        if(flag==1){
-            viewModel = new ViewModelProvider(this).get(AccountViewModel.class);
-            viewModel.getUser().observe(getViewLifecycleOwner(), new Observer<User>() {
-                @Override
-                public void onChanged(User user) {
-
-                    currentUser = user;
-
-                    email_edittext.setText(currentUser.getEmail());
-                    lastname_edittext.setText(currentUser.getLastName());
-                    firstname_edittext.setText(currentUser.getFirstName());
-                    age_edittext.setText(currentUser.getAge());
-                    Picasso.get().load(currentUser.getImageUrl()).placeholder(R.drawable.avatar).into(imagView_profile);
-
-                }
-            });
-
-
-        }
 
         btn_profileAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,8 +103,6 @@ public class AccountFragment extends Fragment {
                 btn_profileAvatar.setVisibility(view.GONE);
                 btn_profileAvatarSave.setVisibility(view.VISIBLE);
                 editImage();
-
-
             }
         });
         btn_profileAvatarSave.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +119,6 @@ public class AccountFragment extends Fragment {
                         Model.instance.addUser(currentUser, new Model.addUserListener() {
                             @Override
                             public void onComplete() {
-
                             }
                         });
                     }
@@ -160,20 +148,15 @@ public class AccountFragment extends Fragment {
                 }else{
                     btn_edit_update.setText("EDIT");
 
-                    Model.instance.getCurrentUserId(new Model.getCurrentUserIdListener() {
+
+                    User u = new User(currentUser.getUserId(),firstname_edittext.getText().toString(),
+                            lastname_edittext.getText().toString(),email_edittext.getText().toString(),age_edittext.getText().toString());
+                    u.setImageUrl(currentUser.getImageUrl());
+
+                    Model.instance.addUser(u, new Model.addUserListener() {
                         @Override
-                        public void onComplete(String id) {
-
-                            User u = new User(id,firstname_edittext.getText().toString(),lastname_edittext.getText().toString(),email_edittext.getText().toString(),age_edittext.getText().toString());
-
-                            Model.instance.addUser(u, new Model.addUserListener() {
-                                @Override
-                                public void onComplete() {
-                                }
-                            });
-                        }
+                        public void onComplete() { }
                     });
-
 
                     firstname_edittext.setEnabled(false);
                     lastname_edittext.setEnabled(false);
@@ -195,6 +178,17 @@ public class AccountFragment extends Fragment {
 
         return view;
     }
+
+    private void requireLogIn() {
+        linearLayout.setVisibility(View.GONE);
+        linearLayout2.setVisibility(View.VISIBLE);
+        cardView_profile.setVisibility(View.INVISIBLE);
+    }
+
+    private void setUserDetails() {
+
+    }
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private void editImage() {
