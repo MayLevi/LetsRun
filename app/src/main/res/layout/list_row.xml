@@ -104,10 +104,12 @@
         android:layout_marginEnd="4dp"
         android:text="delete"
         android:textSize="10sp"
+        android:visibility="invisible"
         app:drawableTopCompat="@drawable/ic_baseline_delete_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.062" />
+        app:layout_constraintVertical_bias="0.062"
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

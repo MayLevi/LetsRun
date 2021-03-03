@@ -129,9 +129,9 @@ public class Model {
     public interface getCurrentUserIdListener{
         void onComplete(String id);
     }
-    public void getCurrentUserId(getCurrentUserIdListener listener){
-        modelFirebase.getCurrentUserId(listener);
-    }
+//    public void getCurrentUserId(getCurrentUserIdListener listener){
+//        modelFirebase.getCurrentUserId(listener);
+//    }
 
     MutableLiveData<String> userIdLiveData = new MutableLiveData<String>();
     public MutableLiveData<String> getCurrentUserId(){

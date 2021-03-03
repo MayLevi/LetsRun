@@ -59,8 +59,6 @@ public class PostFragment extends Fragment {
         btn_location =view.findViewById(R.id.btn_location);
         btn_post = view.findViewById(R.id.btn_post);
         btn_share_email = view.findViewById(R.id.btn_share_email);
-//        edittext_location = view.findViewById(R.id.edittext_location);
-//        edittext_cotact = view.findViewById(R.id.edittext_cotact);
         edittext_Date = view.findViewById(R.id.edittext_Date);
         edittext_info = view.findViewById(R.id.edittext_info);
         edittext_kilometers = view.findViewById(R.id.edittext_kilometers);
@@ -70,8 +68,12 @@ public class PostFragment extends Fragment {
             @Override
             public void onChanged(User user) {
                 currentUser = user;
+                if(currentUser.getUserId().equals("none")){
+                    Navigation.findNavController(view).navigate(R.id.action_global_menu_login);
+                }
             }
         });
+
         btn_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

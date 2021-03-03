@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import com.example.letsrun.R;
 import com.example.letsrun.model.Model;
 
-
-
 public class WallFragment extends Fragment {
 
     @Override

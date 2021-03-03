@@ -10,19 +10,20 @@ public class Post {
 
     //Constructors
     public Post() {}
+
     //TODO add postId to constructor
-    public Post(String userId, String firstName, String lastName, String age, String kilometers, String text, String img) {
-        this.postId = postId;
-        this.likes = likes;
-        this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.kilometers = kilometers;
-        this.text = text;
-        this.location = location;
-        this.img = img;
-    }
+//    public Post(String userId, String firstName, String lastName, String age, String kilometers, String text, String img) {
+//        this.postId = postId;
+//        this.likes = likes;
+//        this.userId = userId;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.age = age;
+//        this.kilometers = kilometers;
+//        this.text = text;
+//        this.location = location;
+//        this.img = img;
+//    }
     public Post(String userId, String firstName, String lastName, String age, String kilometers,
                 String text, String img,String email,String lat,String lon) {
         this.postId = postId;
@@ -45,11 +46,18 @@ public class Post {
         return email;
     }
 
+
+    //Setters
+    public void setText(String text) {
+        this.text = text;
+    }
     public void setEmail(String email) {
         this.email = email;
     }
-
-    //Setters
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+    public void setLikes(String likes) { this.likes = likes; }
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -65,21 +73,16 @@ public class Post {
     public void setKilometers(String kilometers) {
         this.kilometers = kilometers;
     }
-    public void setText(String text) {
-        this.text = text;
-    }
+
+    public void setLat(String lat) { this.lat = lat;}
+    public void setLon(String lon) { this.lon = lon;  }
+
     public void setLocation(String location) {
         this.location = location;
     }
     public void setImg(String img) {
         this.img = img;
     }
-    public void setPostId(String postId) {
-        this.postId = postId;
-    }
-    public void setLikes(String likes) { this.likes = likes; }
-    public void setLat(String lat) { this.lat = lat;}
-    public void setLon(String lon) { this.lon = lon; }
 
     //Getters
     public String getUserId() {

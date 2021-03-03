@@ -111,6 +111,13 @@ public class ModelFirebase implements FirestoreAdapter.OnListItemClick{
 
     public void getCurrentUser(Model.getUserListener listener) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        if(firebaseAuth.getUid()==null){
+            User user = new User();
+            user.setUserId("none");
+            listener.onComplete(user);
+            return;
+        }
         getUser(firebaseAuth.getUid(),listener);
     }
 
@@ -332,9 +339,10 @@ class FirestoreAdapter extends FirestorePagingAdapter<Post,FirestoreAdapter.Post
         postsViewHolder.listrow_km.setText(post.getKilometers());
         postsViewHolder.listrow_Info.setText(post.getText());
         postsViewHolder.listrow_likecounter.setText(post.getLikes());
-        if (!(FirebaseAuth.getInstance().getUid().equals(post.getUserId()))) {
-            postsViewHolder.listrow_delete.setVisibility(View.INVISIBLE);
+        if((FirebaseAuth.getInstance().getUid()!=null)&&(FirebaseAuth.getInstance().getUid().equals(post.getUserId()))) {
+                postsViewHolder.listrow_delete.setVisibility(View.VISIBLE);
         }
+
         postsViewHolder.listrow_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
